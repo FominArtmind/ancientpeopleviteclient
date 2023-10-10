@@ -1,0 +1,9 @@
+{
+    "foodCost": 12,
+    "cultureLevel": 7,
+    "defense": 2,
+    "hunting": 3,
+    "fishing": 1,
+    "properties": { "resourceBonus": { "aurochs": 6 } },
+    "cultureValue": 5
+}

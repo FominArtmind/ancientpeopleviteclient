@@ -1,0 +1,9 @@
+{
+    "foodCost": 15,
+    "cultureLevel": 10,
+    "cultureExchange": 3,
+    "unique": true,
+    "fishing": 1,
+    "properties": { "leadership": 3, "cultureRaid": true, "sociality": 3 },
+    "cultureValue": 10
+}

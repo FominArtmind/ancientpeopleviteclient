@@ -1,0 +1,10 @@
+{
+    "foodCost": 15,
+    "cultureLevel": 10,
+    "unique": true,
+    "defense": 1,
+    "fishing": 1,
+    "properties": { "cultureResistance": true },
+    "villageAction": { "sacrifice": true },
+    "cultureValue": 7
+}

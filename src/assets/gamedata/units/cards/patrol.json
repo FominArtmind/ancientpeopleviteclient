@@ -1,0 +1,8 @@
+{
+    "foodCost": 3,
+    "defense": 1,
+    "hunting": 1,
+    "fishing": 1,
+    "properties": { "migration": 1 },
+    "cultureValue": 1
+}

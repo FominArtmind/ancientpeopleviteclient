@@ -1,0 +1,9 @@
+{
+    "foodCost": 7,
+    "cultureLevel": 4,
+    "hunting": 1,
+    "fishing": 1,
+    "raidFoodSteal": 5,
+    "properties": { "resourceBonus": { "mammoth": 10 }, "pathfinding": true },
+    "cultureValue": 3
+}

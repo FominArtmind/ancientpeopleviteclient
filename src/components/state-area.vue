@@ -5,13 +5,13 @@
       <div>Victory: {{ victory }}</div>
     </div>
     <div class="flex justify-between flex-wrap">
-      <div class="pr-2"><Icon name="bi:sun-fill" /></div>
+      <div class="pr-2"><Icon name="mdi:weather-sunny" /></div>
       <div class="font-semibold px-1">{{ inventions[0] }}</div>
       <div class="px-1">{{ inventions[1] }}</div>
       <div class="px-1">{{ inventions[2] }}</div>
     </div>
     <div class="flex justify-between flex-wrap">
-      <div class="pr-2"><Icon name="fa6-solid:user-group" /></div>
+      <div class="pr-2"><Icon name="mdi:account-supervisor" /></div>
       <div v-for="(player, index) in game.state.players" class="px-1" :class="{ 'font-semibold': index === game.state.actor }">{{ player.nick.substring(0, 10) }}</div>
     </div>
   </div>

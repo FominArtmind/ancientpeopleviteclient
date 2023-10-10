@@ -1,0 +1,10 @@
+{
+    "foodCost": 7,
+    "cultureLevel": 5,
+    "attack": 2,
+    "defense": 1,
+    "fishing": 1,
+    "raidFoodSteal": 3,
+    "properties": { "unity": true, "valor": 1 },
+    "cultureValue": 4
+}

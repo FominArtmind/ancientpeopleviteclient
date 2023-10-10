@@ -1,0 +1,8 @@
+{
+    "foodCost": 10,
+    "cultureLevel": 8,
+    "fishing": 1,
+    "properties": { "extraCards": 2 },
+    "villageAction": { "food": 3, "culture": 3 },
+    "cultureValue": 4
+}

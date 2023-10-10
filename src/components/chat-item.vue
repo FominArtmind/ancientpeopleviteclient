@@ -14,7 +14,7 @@
         </template>
         <template v-if="event.culture && event.culture !== 0">
           <ChatValue :value="event.culture" />
-          <Icon name="bi:fire"/>
+          <Icon name="mdi:fire"/>
         </template>
       </template>
       <template v-else-if="event.type === 'raid'">
@@ -33,7 +33,7 @@
         </template>
         <template v-if="event.cultureGain && event.cultureGain !== 0">
           <ChatValue :value="event.cultureGain" />
-          <Icon name="bi:fire"/>
+          <Icon name="mdi:fire"/>
         </template>
       </template>
       <template v-else-if="event.type === 'card'">
@@ -49,7 +49,7 @@
         <ChatValue :value="event.actor" />
         <ChatValue :value="'lost'" />
         <ChatValue :value="event.culture" />
-        <Icon name="bi:fire"/>
+        <Icon name="mdi:fire"/>
         <ChatValue :value="'due to time penalty'" />
       </template>
       <template v-else-if="event.type === 'putAsideResources'">
@@ -83,7 +83,7 @@
           <template v-for="(value, key) in event.result">
             <ChatValue :value="key" />
             <ChatValue :value="value" />
-            <Icon name="bi:fire"/>
+            <Icon name="mdi:fire"/>
           </template>
         </div>
       </template>

@@ -1,0 +1,7 @@
+{
+    "foodCost": 3,
+    "cultureLevel": 1,
+    "fishing": 1,
+    "villageAction": { "food": 2, "culture": 2 },
+    "cultureValue": 1
+}

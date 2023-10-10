@@ -1,0 +1,7 @@
+{
+    "foodCost": 0,
+    "fishing": 1,
+    "raidFoodSteal": 1,
+    "villageAction": { "food": 3 },
+    "cultureValue": 0.5
+}

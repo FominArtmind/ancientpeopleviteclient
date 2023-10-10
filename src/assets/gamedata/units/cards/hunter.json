@@ -1,0 +1,10 @@
+{
+    "foodCost": 5,
+    "cultureLevel": 2,
+    "attack": 1,
+    "hunting": 2,
+    "fishing": 1,
+    "raidFoodSteal": 2,
+    "properties": { "resourceBonus": { "deer": 3 } },
+    "cultureValue": 3
+}

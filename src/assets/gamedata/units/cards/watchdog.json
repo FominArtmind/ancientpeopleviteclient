@@ -1,0 +1,8 @@
+{
+    "foodCost": 6,
+    "cultureLevel": 5,
+    "defense": 2,
+    "fishing": 1,
+    "properties": { "extraCards": 1, "hideaway": 5 },
+    "cultureValue": 3
+}

@@ -1,0 +1,8 @@
+{
+    "foodCost": 2,
+    "hunting": 1,
+    "fishing": 1,
+    "raidFoodSteal": 2,
+    "properties": { "community": 2, "unity": true },
+    "cultureValue": 0
+}

@@ -5,7 +5,7 @@
     <div class="font-larger line-height-fix">
       <div>
         <Info v-if="resource?.hunting" :tooltip="'Requires ' + resource?.peopleCost + ' hunting in total to get'">
-          <Icon v-for="n in resource?.peopleCost" name="teenyicons:arrow-up-outline"/>
+          <Icon v-for="n in resource?.peopleCost" name="mdi:arrow-up-thin"/>
         </Info>
         <Info v-if="!resource?.hunting" :tooltip="'Requires 1 person to get'">
           <Icon name="ph:person-simple-fill"/>
@@ -51,7 +51,7 @@ import Icon from "./icon.vue";
 
 const props = defineProps<{ card: Card, player?: string }>();
 
-const resource = ref(await resourceCard(props.card.type));
+const resource = ref(resourceCard(props.card.type));
 
 const selected = computed(() => {
   return selection.value.resources.some(value => value.id === props.card.id);

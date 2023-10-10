@@ -1,0 +1,9 @@
+{
+    "foodCost": 2,
+    "attack": 1,
+    "hunting": 1,
+    "fishing": 1,
+    "raidFoodSteal": 1,
+    "properties": { "leadership": 1 },
+    "cultureValue": 2
+}

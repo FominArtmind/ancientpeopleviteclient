@@ -5,9 +5,9 @@
         <template v-slot:activator="{ props }">
           <h1 v-bind="props" id="player-header" class="adaptive-text text-center pt-2 pb-2 cursor-pointer" @click="dialog = true">
             {{ player.nick }} {{ player.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span>
-            {{ player.culture }}<span class="icon-fix"><Icon name="bi:fire"/></span>
+            {{ player.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span>
             <!-- {{ player.awayCardsCount }}<span class="icon-fix"><Icon name="bi:people"/></span> -->
-            {{ player.deckSize }}<span class="icon-fix"><Icon name="bi:files"/></span>
+            {{ player.deckSize }}<span class="icon-fix"><Icon name="mdi:cards"/></span>
             - <span class="icon-fix"><Icon name="mdi:axe"/></span> {{ raidChance }}
             <!--  - {{ timeSpent }} -->
           </h1>

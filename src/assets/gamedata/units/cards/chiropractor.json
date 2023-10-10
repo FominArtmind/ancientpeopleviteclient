@@ -1,0 +1,9 @@
+{
+	"foodCost": 4,
+	"cultureLevel": 1,
+	"hunting": 1,
+  "fishing": 1,
+  "raidFoodSteal": 1,
+	"properties": { "extraCards": 1 },
+	"cultureValue": 2
+}

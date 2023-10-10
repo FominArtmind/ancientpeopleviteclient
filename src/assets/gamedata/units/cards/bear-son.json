@@ -1,0 +1,10 @@
+{
+    "foodCost": 9,
+    "cultureLevel": 3,
+    "defense": 1,
+    "hunting": 2,
+    "fishing": 1,
+    "raidFoodSteal": 4,
+    "properties": { "scent": { "fish": 3 }, "unity": true, "resourceBonus": { "fish": 2 } },
+    "cultureValue": 3
+}

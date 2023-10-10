@@ -6,16 +6,16 @@
       </Info>
       <div class="unit-title">{{ unit?.title }}</div>
       <Info v-if="unit?.cultureLevel" class="unit-culture-level" :tooltip="`${unit?.title} requires at least one player having culture level of ${unit?.cultureLevel} or higher to appear on draft, you must have culture level of ${unit?.cultureLevel} or higher to be able to buy/upgrade to this card`">
-        {{unit?.cultureLevel}}<span class="icon-fix"><Icon name="bi:fire"/></span>
+        {{unit?.cultureLevel}}<span class="icon-fix"><Icon name="mdi:fire"/></span>
       </Info>
     </div>
     <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/units/views/' + card.type + '-icon-white.png)' }"></div>
     <div>
-      <template v-if="unit?.hunting"><Info :tooltip="`${unit?.title} has hunting ${unit?.hunting} (needed for deer, aurochs, mammoth)`"><Icon v-for="n in unit?.hunting" name="teenyicons:arrow-up-outline"/></Info></template>
+      <template v-if="unit?.hunting"><Info :tooltip="`${unit?.title} has hunting ${unit?.hunting} (needed for deer, aurochs, mammoth)`"><Icon v-for="n in unit?.hunting" name="mdi:arrow-up-thin"/></Info></template>
       <template v-if="unit?.attack"><Info :tooltip="`${unit?.title} has attack ${unit?.attack} (needed in raids, increases raid attack dice throw by ${unit?.attack})`"><Icon v-for="n in unit?.attack" name="mdi:axe"/></Info></template>
       <template v-if="unit?.cultureExchange"><Info :tooltip="`${unit?.title} has culture exchange ${unit?.cultureExchange} (needed in raids, increases raid difference for determining culture gain by ${unit?.cultureExchange})`"><Icon v-for="n in unit?.cultureExchange" name="mdi:torch"/></Info></template>
-      <template v-if="unit?.defense"><Info :tooltip="`${unit?.title} has defense ${unit?.defense} (needed in raids defending, increases raid defense dice throw by ${unit?.defense})`"><Icon v-for="n in unit?.defense" name="ic:round-shield"/></Info></template>
-      <template v-if="unit?.raidFoodSteal"><Info :tooltip="`${unit?.title} has raid food steal ${unit?.hunting}`"><Icon name="uil:corner-up-right-alt"/>{{ unit?.raidFoodSteal }}</Info></template>
+      <template v-if="unit?.defense"><Info :tooltip="`${unit?.title} has defense ${unit?.defense} (needed in raids defending, increases raid defense dice throw by ${unit?.defense})`"><Icon class="font-smaller" v-for="n in unit?.defense" name="mdi:shield"/></Info></template>
+      <template v-if="unit?.raidFoodSteal"><Info :tooltip="`${unit?.title} has raid food steal ${unit?.hunting}`"><Icon name="mdi:arrow-right-top"/>{{ unit?.raidFoodSteal }}</Info></template>
       <template v-if="unit?.unique"><Info :tooltip="`${unit?.title} is unique - you can possess only one unit of such type in your deck`"><Icon name="mdi:star-four-points-outline"/></Info></template>
     </div>
     <div v-if="extraCards"><Info :tooltip="`${unit?.title} adds ${extraCards} extra unit cards from the deck to your hand`"><Icon v-for="n in extraCards" class="font-larger" name="mdi:plus-thick"/></Info></div>
@@ -43,12 +43,12 @@
           </Info>
         </div>
         <Info v-if="unit?.villageAction?.food" :tooltip="`${unit?.title} provides ${unit?.villageAction?.food} additional food if stays at site in the end of the living phase and has not been defeated in a raid`">{{unit?.villageAction?.food}}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span></Info>
-        <Info v-if="unit?.villageAction?.culture" :tooltip="`${unit?.title} provides ${unit?.villageAction?.culture} additional culture if stays at site in the end of the living phase and has not been defeated in a raid`">{{unit?.villageAction?.culture}}<span class="icon-fix"><Icon name="bi:fire"/></span></Info>
+        <Info v-if="unit?.villageAction?.culture" :tooltip="`${unit?.title} provides ${unit?.villageAction?.culture} additional culture if stays at site in the end of the living phase and has not been defeated in a raid`">{{unit?.villageAction?.culture}}<span class="icon-fix"><Icon name="mdi:fire"/></span></Info>
         <Info v-if="unit?.villageAction?.sacrifice" :tooltip="`${unit?.title} converts all site food to culture if stays at site in the end of the living phase and has not been defeated in a raid`">Sacrifice</Info>
       </div>
     </template>
     <Info v-if="unit?.cultureValue" class="unit-culture-value" :tooltip="`${unit?.title} can provide up to ${unit?.cultureValue} culture when defeated in raid`">
-      <span class="icon-fix"><Icon name="ic:outline-local-fire-department"/></span><span>{{unit?.cultureValue}}</span>
+      <span class="icon-fix"><Icon name="mdi:rhombus-medium-outline"/></span><span>{{unit?.cultureValue}}</span>
     </Info>
   </CardBody>
 </template>
@@ -124,7 +124,7 @@ import Icon from "./icon.vue";
 
 const props = defineProps<{ card: Card, location?: "village" | "hand" | "draft", suggested?: boolean, rotated?: boolean }>();
 
-const unit = ref(await unitCard(props.card.type));
+const unit = ref(unitCard(props.card.type));
 
 const uprops = computed((): UnitProperties => {
   return unit.value?.properties || {};

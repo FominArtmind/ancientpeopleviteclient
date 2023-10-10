@@ -1,0 +1,11 @@
+{
+    "foodCost": 4,
+    "cultureLevel": 1,
+    "cultureExchange": 2,
+    "defense": 1,
+    "hunting": 1,
+    "fishing": 1,
+    "properties": { "cultureLevelIncrease": 3 },
+    "villageAction": { "culture": 2 },
+    "cultureValue": 3
+}

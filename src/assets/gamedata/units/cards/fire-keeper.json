@@ -1,0 +1,8 @@
+{
+    "foodCost": 1,
+    "defense": 1,
+    "hunting": 1,
+    "fishing": 1,
+    "villageAction": { "food": 1, "culture": 1 },
+    "cultureValue": 1
+}

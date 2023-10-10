@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/font": "^7.3.67",
     "luxon": "^3.4.3",
     "nuxt-socket-io": "3.0.13",
     "tw-elements": "^1.0.0",

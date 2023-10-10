@@ -1,0 +1,7 @@
+{
+    "foodCost": 1,
+    "fishing": 1,
+    "properties": { "scent": { "fish": 1 }, "resourceBonus": { "fish": 2 } },
+    "villageAction": { "culture": 1 },
+    "cultureValue": 1
+}

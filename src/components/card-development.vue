@@ -9,7 +9,7 @@
       <span class="icon-fix transform-icon"><Icon name="mdi:arrow-right-bold-outline"/></span>
       <Info class="info-padding" :tooltip="development?.title + ' provides you with ' + development?.culture + ' culture when gained'">
         <span>{{ development?.culture }}</span>
-        <span class="icon-fix"><Icon name="bi:fire"/></span>
+        <span class="icon-fix"><Icon name="mdi:fire"/></span>
       </Info>
     </div>
   </CardBody>
@@ -49,7 +49,7 @@ import Icon from "./icon.vue";
 
 const props = defineProps<{ card: Card }>();
 
-const development = ref(await developmentCard(props.card.type));
+const development = ref(developmentCard(props.card.type));
 
 const selected = computed(() => {
   return selection.value.development?.id === props.card.id;

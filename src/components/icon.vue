@@ -1,6 +1,6 @@
 <template>
   <div class="inline">
-    {{ name }}
+    <v-icon :icon="parsedName"></v-icon>
   </div>
 </template>
 
@@ -8,6 +8,12 @@
 </style>
 
 <script setup lang="ts">
-defineProps<{ name: string }>();
+import { computed } from "vue";
+
+const props = defineProps<{ name: string }>();
+
+const parsedName = computed(() => {
+  return props.name.replace(":", "-");
+});
 
 </script>

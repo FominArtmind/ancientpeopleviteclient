@@ -1,0 +1,8 @@
+{
+  "foodCost": 3,
+  "attack": 1,
+  "hunting": 1,
+  "fishing": 1,
+  "properties": { "sneak": 2, "unity": true },
+  "cultureValue": 1
+}
