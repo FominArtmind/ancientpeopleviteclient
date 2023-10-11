@@ -71,7 +71,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, computed, inject } from "vue";
+import { ref, Ref, computed, inject } from "vue";
 import { Player, Card, VillageCard } from "../types/game";
 import { nickname, game, hand } from "../composables/state";
 // @ts-ignore
@@ -80,12 +80,12 @@ import CardUnit from "./card-unit.vue";
 import Icon from "./icon.vue";
 
 const emit = defineEmits<{
-  cardClicked: [card: Card | VillageCard, location: string]
-  cardRightClicked: [card: Card | VillageCard, location: string]
+  cardClicked: [card: Card | VillageCard, location: "village" | "hand"]
+  cardRightClicked: [card: Card | VillageCard, location: "village" | "hand"]
 }>();
 
-const windowWidth = inject<globalThis.Ref<number>>("windowWidth", ref(0));
-const windowHeight = inject<globalThis.Ref<number>>("windowHeight", ref(0));
+const windowWidth = inject<Ref<number>>("windowWidth", ref(0));
+const windowHeight = inject<Ref<number>>("windowHeight", ref(0));
 
 const hero = computed(() => {
   return game.value.state.players.find(value => value.nick === nickname.value) as Player;

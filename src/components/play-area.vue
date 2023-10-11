@@ -97,7 +97,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, ComputedRef, computed, nextTick } from "vue";
 import { Card, VillageCard, Player, Action } from "../types/game";
 import { MenuAction } from "../types/menu-action";
 import { nickname, game, selection, actionPerformed, performAction } from "../composables/state";
@@ -457,14 +457,14 @@ function performPlayerAction(action: Action) {
   }
 }
 
-function play() {
-  performPlayerAction({
-    actor: nickname.value,
-    type: "card",
-    source: [],
-    aim: []
-  });
-}
+// function play() {
+//   performPlayerAction({
+//     actor: nickname.value,
+//     type: "card",
+//     source: [],
+//     aim: []
+//   });
+// }
 
 function selectSocialityCardsToReturn() {
   performPlayerAction({
@@ -475,14 +475,14 @@ function selectSocialityCardsToReturn() {
   });
 }
 
-function selectPathfindingCard() {
-  performPlayerAction({
-    actor: nickname.value,
-    type: "choosingPathfindingCard",
-    source: [],
-    aim: [...selection.value.resources.map(value => value.id)]
-  });
-}
+// function selectPathfindingCard() {
+//   performPlayerAction({
+//     actor: nickname.value,
+//     type: "choosingPathfindingCard",
+//     source: [],
+//     aim: [...selection.value.resources.map(value => value.id)]
+//   });
+// }
 
 function hunt() {
   performPlayerAction({

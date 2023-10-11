@@ -65,7 +65,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, computed, inject } from "vue";
+import { ref, Ref, computed, inject } from "vue";
 import { Player } from "../types/game";
 import { game } from "../composables/state";
 // @ts-ignore
@@ -78,8 +78,8 @@ const props = defineProps<{ player: Player }>();
 
 const dialog = ref(false);
 
-const windowWidth = inject<globalThis.Ref<number>>("windowWidth", ref(0));
-const windowHeight = inject<globalThis.Ref<number>>("windowHeight", ref(0));
+const windowWidth = inject<Ref<number>>("windowWidth", ref(0));
+const windowHeight = inject<Ref<number>>("windowHeight", ref(0));
 
 const totalPlayers = computed(() => {
   return game.value.players.length;

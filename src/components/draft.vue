@@ -33,9 +33,9 @@ const draft = computed(() => {
   return game.value.state.draftCards;
 });
 
-const draftDeckSize = computed(() => {
-  return game.value.state.draftDeckSize;
-});
+// const draftDeckSize = computed(() => {
+//   return game.value.state.draftDeckSize;
+// });
 
 const developmentCards = computed(() => {
   return game.value.state.developmentCards;

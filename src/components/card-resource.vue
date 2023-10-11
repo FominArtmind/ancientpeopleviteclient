@@ -5,7 +5,7 @@
     <div class="font-larger line-height-fix">
       <div>
         <Info v-if="resource?.hunting" :tooltip="'Requires ' + resource?.peopleCost + ' hunting in total to get'">
-          <Icon v-for="n in resource?.peopleCost" name="mdi:arrow-up-thin"/>
+          <Icon v-for="_n in resource?.peopleCost" name="mdi:arrow-up-thin"/>
         </Info>
         <Info v-if="!resource?.hunting" :tooltip="'Requires 1 person to get'">
           <Icon name="ph:person-simple-fill"/>

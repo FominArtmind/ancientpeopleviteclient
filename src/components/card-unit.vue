@@ -11,14 +11,14 @@
     </div>
     <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/units/views/' + card.type + '-icon-white.png)' }"></div>
     <div>
-      <template v-if="unit?.hunting"><Info :tooltip="`${unit?.title} has hunting ${unit?.hunting} (needed for deer, aurochs, mammoth)`"><Icon v-for="n in unit?.hunting" name="mdi:arrow-up-thin"/></Info></template>
-      <template v-if="unit?.attack"><Info :tooltip="`${unit?.title} has attack ${unit?.attack} (needed in raids, increases raid attack dice throw by ${unit?.attack})`"><Icon v-for="n in unit?.attack" name="mdi:axe"/></Info></template>
-      <template v-if="unit?.cultureExchange"><Info :tooltip="`${unit?.title} has culture exchange ${unit?.cultureExchange} (needed in raids, increases raid difference for determining culture gain by ${unit?.cultureExchange})`"><Icon v-for="n in unit?.cultureExchange" name="mdi:torch"/></Info></template>
-      <template v-if="unit?.defense"><Info :tooltip="`${unit?.title} has defense ${unit?.defense} (needed in raids defending, increases raid defense dice throw by ${unit?.defense})`"><Icon class="font-smaller" v-for="n in unit?.defense" name="mdi:shield"/></Info></template>
+      <template v-if="unit?.hunting"><Info :tooltip="`${unit?.title} has hunting ${unit?.hunting} (needed for deer, aurochs, mammoth)`"><Icon v-for="_n in unit?.hunting" name="mdi:arrow-up-thin"/></Info></template>
+      <template v-if="unit?.attack"><Info :tooltip="`${unit?.title} has attack ${unit?.attack} (needed in raids, increases raid attack dice throw by ${unit?.attack})`"><Icon v-for="_n in unit?.attack" name="mdi:axe"/></Info></template>
+      <template v-if="unit?.cultureExchange"><Info :tooltip="`${unit?.title} has culture exchange ${unit?.cultureExchange} (needed in raids, increases raid difference for determining culture gain by ${unit?.cultureExchange})`"><Icon v-for="_n in unit?.cultureExchange" name="mdi:torch"/></Info></template>
+      <template v-if="unit?.defense"><Info :tooltip="`${unit?.title} has defense ${unit?.defense} (needed in raids defending, increases raid defense dice throw by ${unit?.defense})`"><Icon class="font-smaller" v-for="_n in unit?.defense" name="mdi:shield"/></Info></template>
       <template v-if="unit?.raidFoodSteal"><Info :tooltip="`${unit?.title} has raid food steal ${unit?.hunting}`"><Icon name="mdi:arrow-right-top"/>{{ unit?.raidFoodSteal }}</Info></template>
       <template v-if="unit?.unique"><Info :tooltip="`${unit?.title} is unique - you can possess only one unit of such type in your deck`"><Icon name="mdi:star-four-points-outline"/></Info></template>
     </div>
-    <div v-if="extraCards"><Info :tooltip="`${unit?.title} adds ${extraCards} extra unit cards from the deck to your hand`"><Icon v-for="n in extraCards" class="font-larger" name="mdi:plus-thick"/></Info></div>
+    <div v-if="extraCards"><Info :tooltip="`${unit?.title} adds ${extraCards} extra unit cards from the deck to your hand`"><Icon v-for="_n in extraCards" class="font-larger" name="mdi:plus-thick"/></Info></div>
     <div v-if="community"><Info :tooltip="`${unit?.title} opens ${community} unit cards from the deck, adds ${unit?.title} ones to your hand, other card types are put under the deck`">Community{{ community > 1 ? " " + community : "" }}</Info></div>
     <div v-if="migration"><Info :tooltip="`${unit?.title} opens ${migration} resource cards and adds them to your resources`">Migration{{ migration > 1 ? " " + migration : "" }}</Info></div>
     <div v-if="scent"><Info :tooltip="`${unit?.title} opens ${scent.value} resource cards and adds all ${scent.type} to your resources`">{{ scent.type }} scent {{ scent.value }}</Info></div>

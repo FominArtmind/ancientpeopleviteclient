@@ -6,8 +6,8 @@
         <div class="mx-2"></div>
         <ArtIcon v-for="unit in event.hunters" :type="unit" />
         <ChatValue :value="event.resource === 'fish' ? 'fishes' : 'hunts'" />
-        <ArtIcon v-for="n in event.number" :type="event.resource" :kind="'resource'" />
-        <Icon name="bi:arrow-right"/>
+        <ArtIcon v-for="_n in event.number" :type="event.resource" :kind="'resource'" />
+        <Icon name="mdi:arrow-right-thin"/>
         <template v-if="event.food && event.food !== 0">
           <ChatValue :value="event.food" />
           <Icon name="mdi:food-drumstick"/>
@@ -25,7 +25,7 @@
         <ChatValue :value="event.aim" />
         <ArtIcon v-for="unit in event.victims" :type="unit.type" />
         <ChatValue :value="`(${event.chances?.winRate}%)`"/>
-        <Icon name="bi:arrow-right"/>
+        <Icon name="mdi:arrow-right-thin"/>
         <ChatValue :value="event.success ? 'SUCCESS' : 'FAILURE'" />
         <template v-if="event.foodGain && event.foodGain !== 0">
           <ChatValue :value="event.foodGain" />
@@ -96,7 +96,7 @@
         <ChatValue :value="event.actor" />
         <ChatValue :value="'upgrades'" />
         <ArtIcon :type="event.from" />
-        <Icon name="bi:arrow-right"/>
+        <Icon name="mdi:arrow-right-thin"/>
         <ArtIcon :type="event.unit" />
       </template>
       <template v-else-if="event.type === 'pathfindingChoice'">
@@ -146,7 +146,7 @@
         <!-- <ChatValue :value="event.actor" /> -->
         <div class="mx-2"></div>
         <ChatValue :value="'adds'" />
-        <ArtIcon v-for="n in event.number" :type="event.unit" />
+        <ArtIcon v-for="_n in event.number" :type="event.unit" />
         <ChatValue :value="'to their hand'" />
       </template>
       <template v-else-if="event.type === 'chat'">
