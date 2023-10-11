@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-screen h-screen bg-image bg-cover select-none">
+  <div class="flex w-screen h-screen bg-cover select-none" :style="{ 'background-image': 'url(./intro-bg.png)' }">
     <div class="w-1/5 h-screen overflow-hidden">
       <StateArea class="h-28" />
       <ChatArea class="h-[calc(100%-160px)]" />
@@ -12,9 +12,6 @@
 </template>
 
 <style scoped>
-.bg-image {
-  background-image: url("./assets/intro-bg.png");
-}
 </style>
 
 <script setup lang="ts">
