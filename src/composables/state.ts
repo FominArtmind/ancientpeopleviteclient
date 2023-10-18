@@ -437,11 +437,15 @@ export const events = ref<GeneralEvent[]>([
   }
 ]);
 
-export const selection = ref<SelectionState>({
-  resources: [],
-  hand: [],
-  village: []
-});
+const emtySelection = () => {
+  return {
+    resources: [],
+    hand: [],
+    village: []
+  }
+};
+
+export const selection = ref<SelectionState>(emtySelection());
 
 export const performAction = (action: Action) => {
   console.log("Action", action);
@@ -461,11 +465,13 @@ socket.on("disconnect", () => {
 socket.on("game", (game_: Game) => {
   console.log("Socket game", game_);
   game.value = game_;
+  selection.value = emtySelection();
   gameLoaded.value = true;
 });
 socket.on("hand", (hand_: Card[]) => {
   console.log("Socket hand", hand_);
   hand.value = hand_;
+  selection.value = emtySelection();
   handLoaded.value = true;
 });
 socket.on("stat", (stat: any) => {
@@ -476,9 +482,11 @@ socket.on("done", () => {
   console.log("Socket done");
 });
 socket.on("rejected", (err: string) => {
+  actionPerformed.value = false;
   console.log("Socket rejected", err);
 });
 socket.on("error", (err: string) => {
+  actionPerformed.value = false;
   console.log("Socket error", err);
 });
 
