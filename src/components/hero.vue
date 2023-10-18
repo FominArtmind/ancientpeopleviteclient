@@ -14,7 +14,7 @@
             <div class="hand-arrow"><Icon name="mdi:arrow-left-bold-outline"/></div>
           </div>
           <div class="adaptive-text-container" v-for="card in hand">
-            <CardUnit :card="card" :location="'hand'" :suggested="true" @click="$emit('cardClicked', card, 'hand')" />
+            <CardUnit :card="card" :location="'hand'" :suggested="hero.state.playingCard" @click="$emit('cardClicked', card, 'hand')" />
             <!--<div class="adaptive-text">Hand</div> -->
           </div>
         </template>
@@ -62,11 +62,11 @@
   }
 }
 
-@keyframes blink { 
+@keyframes move { 
   50% { color: #c4ecf8; transform: translate(2px, 0px); } 
 }
 .action-required {
-  animation: blink 1.75s infinite ease;
+  animation: move 1.75s infinite ease;
 }
 </style>
 
@@ -90,13 +90,51 @@ const windowHeight = inject<Ref<number>>("windowHeight", ref(0));
 const hero = computed(() => {
   return game.value.state.players.find(value => value.nick === nickname.value) as Player;
 });
+const heroTurn = computed(() => {
+  return game.value.state.players[game.value.state.actor].nick === nickname.value;
+});
+
+const phase = computed(() => {
+  return game.value.state.phase;
+});
 
 const timeSpent = computed(() => {
   return DateTime.fromMillis(hero.value.timeTakenMs).toFormat("m:ss");
 });
 
 const action = computed(() => {
-  return "Play card from hand";
+  if(!heroTurn.value) {
+    return "";
+  }
+
+  if(hero.value.state.playingCard) {
+    return "Play card from hand";
+  }
+  if(hero.value.state.pathfindingChoose) {
+    return "Select pathfinding card";
+  }
+  if(hero.value.state.sociality) {
+    return "Select sociality card(s) to return";
+  }
+
+  if(phase.value === "living") {
+    const unity = hero.value.state.unity && hero.value.village.map(value => value.card.type).includes(hero.value.state.unity);
+    if(hero.value.state.leadership.length > 0) {
+      if(unity) {
+        return "Play extra " + hero.value.state.unity + " or leadership card, hunt, raid or pass";
+      }
+      
+      return "Play extra leadership card, hunt, raid or pass";
+    }
+    else if(unity) {
+      return "Play extra " + hero.value.state.unity + " card, hunt, raid or pass";
+    }
+  
+    return "Hunt, raid or pass";
+  }
+  else {
+    return "Buy, upgrade, develop or pass";
+  }
 });
 
 const heroAreaMaxWidthStyle = computed(() => {
