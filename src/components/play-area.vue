@@ -36,14 +36,14 @@
         </li>
       </template>
     </ul>
-    <div v-if="opponents.length === 0" class="empty-opponents">
+    <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
     </div>
-    <div v-if="opponents.length > 0" class="flex">
+    <div v-if="gameLoaded && opponents.length > 0" class="flex">
       <Opponent v-for="opponent in opponents" :player="opponent" />
     </div>
-    <Resources v-if="phase === 'living'" @cardClicked="processResourceCardClicked" />
-    <Draft v-if="phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
-    <Hero @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
+    <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
+    <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
+    <Hero v-if="gameLoaded" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
   </div>
 </template>
 
@@ -100,7 +100,7 @@
 import { ref, ComputedRef, computed, nextTick } from "vue";
 import { Card, VillageCard, Player, Action } from "../types/game";
 import { MenuAction } from "../types/menu-action";
-import { nickname, game, selection, actionPerformed, performAction } from "../composables/state";
+import { nickname, gameLoaded, game, selection, actionPerformed, performAction } from "../composables/state";
 import { clone } from "../utils/clone";
 import ArtIcon from "./art-icon.vue";
 import ChatValue from "./chat-value.vue";
@@ -178,7 +178,10 @@ function closeMenu() {
 function processHeroCardClicked(card: Card | VillageCard, location: "village" | "hand") {
   if(!actionPerformed.value) {
     if(heroTurn.value && !hero.value.state.pathfindingChoose) {
-      if(hero.value.state.sociality) {
+      if(hero.value.state.playingCard) {
+        play((card as Card).id);
+      }
+      else if(hero.value.state.sociality) {
         if(location === "hand") {
           const hcard = card as Card;
           const index = selection.value.hand.findIndex(value => value.id === hcard.id);
@@ -245,7 +248,7 @@ function processResourceCardClicked(card: Card, player?: string) {
   if(!actionPerformed.value) {
     if(heroTurn.value) {
       if(hero.value.state.pathfindingChoose) {
-        // TO DO perform action on the resource
+        selectPathfindingCard(card.id);
       }
       else if(!hero.value.state.sociality) {
         if(!player || player === nickname.value) {
@@ -457,14 +460,14 @@ function performPlayerAction(action: Action) {
   }
 }
 
-// function play() {
-//   performPlayerAction({
-//     actor: nickname.value,
-//     type: "card",
-//     source: [],
-//     aim: []
-//   });
-// }
+function play(id: number) {
+  performPlayerAction({
+    actor: nickname.value,
+    type: "card",
+    source: [id],
+    aim: []
+  });
+}
 
 function selectSocialityCardsToReturn() {
   performPlayerAction({
@@ -475,14 +478,14 @@ function selectSocialityCardsToReturn() {
   });
 }
 
-// function selectPathfindingCard() {
-//   performPlayerAction({
-//     actor: nickname.value,
-//     type: "choosingPathfindingCard",
-//     source: [],
-//     aim: [...selection.value.resources.map(value => value.id)]
-//   });
-// }
+function selectPathfindingCard(id: number) {
+  performPlayerAction({
+    actor: nickname.value,
+    type: "choosingPathfindingCard",
+    source: [],
+    aim: [id]
+  });
+}
 
 function hunt() {
   performPlayerAction({

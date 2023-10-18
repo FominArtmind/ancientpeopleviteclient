@@ -3,6 +3,11 @@ import { ref } from "vue";
 import { GeneralEvent } from "../types/events";
 import { Card, VillageCard, Game, Action } from "../types/game";
 
+// @ts-ignore
+import io from "socket.io-client";
+// @ts-ignore
+export const socket = io.connect(import.meta.env.VITE_API_ADDRESS, { query: "token=" + localStorage.getItem("token") });
+
 export interface GameState {
   game: Game
   hand: Card[]
@@ -17,11 +22,12 @@ export interface SelectionState {
   development?: Card
 }
 
-export const gameId = ref<string>("id111");
-export const nickname = ref<string>("Arseniy");
+export const gameId = ref<string>(localStorage.getItem("gameId") as string);
+export const nickname = ref<string>(localStorage.getItem("nickname") || "Arseniy" as string);
 
 export const actionPerformed = ref(false);
 
+export const gameLoaded = ref(false);
 export const game = ref<Game>({
   id: "id",
   version: "192",
@@ -195,6 +201,7 @@ export const game = ref<Game>({
   lastPlayerActionTime: 1694763459000
 });
 
+export const handLoaded = ref(false);
 export const hand = ref<Card[]>([
   { id: 118, type: 'fire-keeper'},
   { id: 119, type: 'inhabitant'}
@@ -437,11 +444,43 @@ export const selection = ref<SelectionState>({
 });
 
 export const performAction = (action: Action) => {
-  console.log(action);
+  console.log("Action", action);
 
-  // TO DO
-  actionPerformed.value = false;
+  socket.emit("gameAction", { nickname: nickname.value, gameId: gameId.value, gameAction: action });
 }
+
+socket.on("connect", () => {
+  console.log("Socket authenticated", { nickname: nickname.value, gameId: gameId.value });
+  socket.emit("gameInit", { nickname: nickname.value, gameId: gameId.value });
+});
+
+socket.on("disconnect", () => {
+  console.log("Socket disconnected");
+});
+
+socket.on("game", (game_: Game) => {
+  console.log("Socket game", game_);
+  game.value = game_;
+  gameLoaded.value = true;
+});
+socket.on("hand", (hand_: Card[]) => {
+  console.log("Socket hand", hand_);
+  hand.value = hand_;
+  handLoaded.value = true;
+});
+socket.on("stat", (stat: any) => {
+  console.log("Socket stat", stat);
+});
+socket.on("done", () => {
+  actionPerformed.value = false;
+  console.log("Socket done");
+});
+socket.on("rejected", (err: string) => {
+  console.log("Socket rejected", err);
+});
+socket.on("error", (err: string) => {
+  console.log("Socket error", err);
+});
 
 // const opponent1 = ref<Player>({
 //   nick: "Kuzma",

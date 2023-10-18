@@ -9,7 +9,7 @@
           <CardUnit :card="card.card" :location="'village'" :rotated="card.rotated" @click="$emit('cardClicked', card, 'village')" @contextmenu="$emit('cardRightClicked', card, 'village')" />
           <!--<div class="adaptive-text">{{ card.rotated ? 'Rotated' : '' }}</div> -->
         </div>
-        <template v-if="hand.length > 0">
+        <template v-if="handLoaded && hand.length > 0">
           <div class="flex justify-center items-center">
             <div class="hand-arrow"><Icon name="mdi:arrow-left-bold-outline"/></div>
           </div>
@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import { ref, Ref, computed, inject } from "vue";
 import { Player, Card, VillageCard } from "../types/game";
-import { nickname, game, hand } from "../composables/state";
+import { nickname, game, handLoaded, hand } from "../composables/state";
 // @ts-ignore
 import { DateTime } from "luxon";
 import CardUnit from "./card-unit.vue";
