@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-between p-2 border-b-2 border-white">
+  <div class="flex flex-col justify-between p-2 border-b-2 border-white" @contextmenu="$event.preventDefault()">
     <div class="flex justify-between flex-wrap">
       <div>Turn {{ game.state.turn }}, {{ game.state.phase }} phase</div>
       <div>Victory: {{ victory }}</div>

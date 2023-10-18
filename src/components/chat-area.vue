@@ -1,5 +1,5 @@
 <template>
-  <div class="scrollable-div overflow-y-auto font-light">
+  <div class="scrollable-div overflow-y-auto font-light" @contextmenu="$event.preventDefault()">
     <div ref="chatElement" class="scrollable-div-inside">
       <ChatItem v-for="event in events" :event="event"/>
     </div>
