@@ -1,3 +1,5 @@
+import { GeneralEvent } from "./events";
+
 export interface Card {
   id: number
   type: string
@@ -77,6 +79,7 @@ export interface Game {
   inventions: string[]
   startTime: number
   lastPlayerActionTime: number
+  events?: GeneralEvent[]
 }
 
 export interface PlayerResources {
