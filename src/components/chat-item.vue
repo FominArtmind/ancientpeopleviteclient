@@ -67,8 +67,10 @@
       <template v-else-if="event.type === 'extraFood'">
         <ChatValue :value="'Draft culture level'" />
         <ChatValue :value="event.maxCulture" />
-        <ArtIcon v-for="unit in event.discard" :type="unit" />
-        <ChatValue :value="'discarded as not meeting the requirements'" />
+        <template v-if="event.discard?.length">
+          <ArtIcon v-for="unit in event?.discard" :type="unit" />
+          <ChatValue :value="'discarded as not meeting the requirements'" />
+        </template>
       </template>
       <template v-else-if="event.type === 'develop'">
         <ChatValue :value="event.actor" />
