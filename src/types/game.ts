@@ -32,9 +32,10 @@ export interface Option {
 
 export interface Action {
   actor: string
-  type: "card" | "hunt" | "raid" | "buy" | "upgrade" | "develop" | "pass" | "choosingPathfindingCard" | "returningSocialityCards"
+  type: "card" | "hunt" | "raid" | "buy" | "upgrade" | "develop" | "pass" | "choosingPathfindingCard" | "returningSocialityCards" | "chat"
   source: number[]
   aim: number[]
+  text?: string
 }
 
 export interface Player {

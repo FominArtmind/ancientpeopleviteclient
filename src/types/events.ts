@@ -141,7 +141,15 @@ export interface CommunityEvent {
   number: number
 }
 
-// TO DO
+export interface VillageEvent {
+  type: "village"
+  actor: string
+  food: number
+  culture: number
+  sacrificedFood?: number
+  sacrificeCulture?: number
+}
+
 export interface ChatEvent {
   type: "chat"
   actor: string
@@ -158,6 +166,8 @@ export interface GeneralEvent {
   food?: number
   culture?: number
   maxCulture?: number
+  sacrificedFood?: number
+  sacrificeCulture?: number
   hunters?: string[]
   resource?: string
   number?: number

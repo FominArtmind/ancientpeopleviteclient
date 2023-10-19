@@ -454,6 +454,12 @@ export const performAction = (action: Action) => {
   socket.emit("gameAction", { nickname: nickname.value, gameId: gameId.value, gameAction: action });
 }
 
+export const sendMessage = (text: string) => {
+  console.log("Chat", text);
+
+  socket.emit("gameChat", { nickname: nickname.value, message: text });
+}
+
 socket.on("connect", () => {
   console.log("Socket authenticated", { nickname: nickname.value, gameId: gameId.value });
   socket.emit("gameInit", { nickname: nickname.value, gameId: gameId.value });
@@ -480,6 +486,14 @@ socket.on("hand", (hand_: Card[]) => {
   selection.value = emtySelection();
   handLoaded.value = true;
 });
+socket.on("chat", (data: { nickname: string, message: string }) => {
+  console.log("Socket chat", data);
+  events.value.push({
+    actor: data.nickname,
+    type: "chat",
+    text: data.message
+  });
+});
 socket.on("stat", (stat: any) => {
   console.log("Socket stat", stat);
 });
@@ -489,10 +503,12 @@ socket.on("done", () => {
 });
 socket.on("rejected", (err: string) => {
   actionPerformed.value = false;
+  alert(err);
   console.log("Socket rejected", err);
 });
 socket.on("error", (err: string) => {
   actionPerformed.value = false;
+  alert(err);
   console.log("Socket error", err);
 });
 
