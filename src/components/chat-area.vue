@@ -31,13 +31,17 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { events } from "../composables/state";
 import ChatItem from "./chat-item.vue";
 
 const chatElement = ref<HTMLDivElement>();
 
 onMounted(() => {
+  scrollToLastChatItem();
+});
+
+watch(events, () => {
   scrollToLastChatItem();
 });
 
