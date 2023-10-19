@@ -149,6 +149,28 @@
         <ArtIcon v-for="_n in event.number" :type="event.unit" />
         <ChatValue :value="'to their hand'" />
       </template>
+      <template v-else-if="event.type === 'village'">
+        <ChatValue :value="event.actor" />
+        <div class="mx-2"></div>
+        <ChatValue :value="'gains'" />
+        <template v-if="event.food && event.food !== 0">
+          <ChatValue :value="event.food" />
+          <Icon name="mdi:food-drumstick"/>
+        </template>
+        <template v-if="event.culture && event.culture !== 0">
+          <ChatValue :value="event.culture" />
+          <Icon name="mdi:fire"/>
+        </template>
+        <template v-if="event.sacrificeCulture">
+          <ChatValue :value="'and sacrifices'" />
+          <ChatValue :value="event.sacrificedFood" />
+          <Icon name="mdi:food-drumstick"/>
+          <ChatValue :value="'to get'" />
+          <ChatValue :value="event.sacrificeCulture" />
+          <Icon name="mdi:fire"/>
+        </template>
+        <ChatValue :value="'due to village actions'" />
+      </template>
       <template v-else-if="event.type === 'chat'">
         <div class="chat-player-message">
           <ChatValue :value="event.actor" />
