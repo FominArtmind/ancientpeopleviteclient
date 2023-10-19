@@ -457,7 +457,7 @@ export const performAction = (action: Action) => {
 export const sendMessage = (text: string) => {
   console.log("Chat", text);
 
-  socket.emit("gameChat", { nickname: nickname.value, message: text });
+  socket.emit("gameChat", { nickname: nickname.value, gameId: gameId.value, message: text });
 }
 
 socket.on("connect", () => {
