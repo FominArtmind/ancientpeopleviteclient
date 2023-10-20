@@ -37,19 +37,17 @@ import ChatItem from "./chat-item.vue";
 
 const chatElement = ref<HTMLDivElement>();
 
-onMounted(() => {
-  scrollToLastChatItem();
-});
-
-watch(events, () => {
-  console.log("trying to scroll chat");
-  scrollToLastChatItem();
-});
-
-function scrollToLastChatItem() {
+const scrollToLastChatItem = () => {
   const lastChildElement = chatElement.value?.lastElementChild;
   lastChildElement?.scrollIntoView({
     behavior: "smooth"
   });
-}
+};
+
+onMounted(() => {
+  scrollToLastChatItem();
+});
+
+watch(events, scrollToLastChatItem, { deep: true });
+
 </script>
