@@ -42,6 +42,7 @@ onMounted(() => {
 });
 
 watch(events, () => {
+  console.log("trying to scroll chat");
   scrollToLastChatItem();
 });
 

@@ -11,13 +11,6 @@
 </style>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-// @ts-ignore
-import { Tooltip, initTE } from "tw-elements";
-
-onMounted(() => {
-  initTE({ Tooltip });
-});
-
 defineProps<{ type?: string, kind?: "unit" | "resource" | "development" }>();
+
 </script>
