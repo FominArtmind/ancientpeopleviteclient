@@ -41,7 +41,7 @@
 </style>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { Card } from "../types/game";
 import { developmentCard } from "../composables/content";
 import { selection } from "../composables/state";
@@ -51,7 +51,9 @@ import Icon from "./icon.vue";
 
 const props = defineProps<{ card: Card }>();
 
-const development = ref(developmentCard(props.card.type));
+const development = computed(() => {
+  return developmentCard(props.card.type);
+});
 
 const selected = computed(() => {
   return selection.value.development?.id === props.card.id;

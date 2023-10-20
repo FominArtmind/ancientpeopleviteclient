@@ -112,7 +112,7 @@
 </style>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { Card } from "../types/game";
 import { UnitProperties } from "../types/unit";
 import { unitCard } from "../composables/content";
@@ -124,7 +124,9 @@ import Icon from "./icon.vue";
 
 const props = defineProps<{ card: Card, location?: "village" | "hand" | "draft", suggested?: boolean, rotated?: boolean }>();
 
-const unit = ref(unitCard(props.card.type));
+const unit = computed(() => {
+  return unitCard(props.card.type);
+});
 
 const uprops = computed((): UnitProperties => {
   return unit.value?.properties || {};
