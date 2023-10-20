@@ -1,5 +1,6 @@
 <template>
-  <div class="inline" :v-tooltip="tooltip">
+  <div class="inline">
+    <v-tooltip activator="parent" location="bottom" width="200px">{{ tooltip }}</v-tooltip>
     <slot />
   </div>
 </template>

@@ -1,6 +1,8 @@
 <template>
   <CardBody :selected="selected">
-    <div class="w-full image-container bg-contain bg-no-repeat" :v-tooltip="development?.title" :style="{ 'background-image': 'url(./gamedata/actions/views/' + card.type + '-white.png)' }"></div>
+    <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/actions/views/' + card.type + '-white.png)' }">
+      <v-tooltip activator="parent" location="bottom" width="200px">{{ development?.title }}</v-tooltip>
+    </div>
     <div class="font-larger line-height-fix">
       <Info :tooltip="`Requires ${development?.foodCost} food to gain`">
         <span>{{ development?.foodCost }}</span>

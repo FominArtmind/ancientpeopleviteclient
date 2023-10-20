@@ -2,8 +2,7 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,vue,ts}",
-    "./node_modules/tw-elements/dist/js/**/*.js",
+    "./src/**/*.{js,vue,ts}"
   ],
   theme: {
     extend: {
@@ -23,6 +22,6 @@ export default {
       }
     }
   },
-  plugins: [require("tw-elements/dist/plugin.cjs")]
+  plugins: []
 }
 

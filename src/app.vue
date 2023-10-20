@@ -15,10 +15,10 @@
 </style>
 
 <script setup lang="ts">
-import "tw-elements/dist/css/tw-elements.min.css";
+// import "tw-elements/dist/css/tw-elements.min.css";
 import { onMounted, onUnmounted, provide } from "vue";
 // @ts-ignore
-import { Tooltip, Popover, Ripple, Carousel, initTE } from "tw-elements";
+// import { Tooltip, Popover, Ripple, Carousel, initTE } from "tw-elements";
 import { ref } from "vue";
 import StateArea from "./components/state-area.vue";
 import ChatArea from "./components/chat-area.vue";
@@ -33,7 +33,7 @@ const handleResize = () => {
   windowHeight.value = window.innerHeight;
 }
 onMounted(() => {
-  initTE({ Tooltip, Popover, Ripple, Carousel });
+  // initTE({ Tooltip, Popover, Ripple, Carousel });
   window.addEventListener("resize", handleResize);
 });
 onUnmounted(() => {
