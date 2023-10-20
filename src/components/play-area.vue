@@ -36,14 +36,14 @@
         </li>
       </template>
     </ul>
-    <div v-if="gameLoaded && opponents.length === 0 && !actionPerformed" class="empty-opponents">
+    <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
     </div>
-    <div v-if="gameLoaded && opponents.length > 0 && !actionPerformed" class="flex">
+    <div v-if="gameLoaded && opponents.length > 0" class="flex">
       <Opponent v-for="opponent in opponents" :player="opponent" />
     </div>
-    <Resources v-if="gameLoaded && phase === 'living' && !actionPerformed" @cardClicked="processResourceCardClicked" />
-    <Draft v-if="gameLoaded && phase === 'development' && !actionPerformed" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
-    <Hero v-if="gameLoaded && !actionPerformed" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
+    <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
+    <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
+    <Hero v-if="gameLoaded" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
   </div>
 </template>
 
