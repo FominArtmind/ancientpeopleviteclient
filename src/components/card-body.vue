@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container" :class="{ 'rotated': rotated }" data-te-toggle="tooltip" v-bind:title="rotated ? `Rotated: can't defend raids and raid themselves, can't perform site actions` : ''">
+  <div class="card-container" :class="{ 'rotated': rotated }" :v-tooltip="rotated ? `Rotated: can't defend raids and raid themselves, can't perform site actions` : ''">
     <!--<div
       class="w-full h-full card-bg-image block max-w-sm bg-white bg-cover p-6 shadow-lg dark:bg-neutral-700"
       :class="{ 'border-4': selected, 'card-bg-image-selected': selected }"

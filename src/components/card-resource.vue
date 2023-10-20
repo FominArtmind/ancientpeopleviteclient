@@ -1,7 +1,7 @@
 <template>
   <CardBody :selected="selected">
     <h3 v-if="player" class="player-nick">{{ player }}</h3>
-    <div class="w-full image-container bg-contain bg-no-repeat" data-te-toggle="tooltip" v-bind:title="resource?.title" :style="{ 'background-image': 'url(./gamedata/resources/views/' + card.type + '-white.png)' }"></div>
+    <div class="w-full image-container bg-contain bg-no-repeat" :v-tooltip="resource?.title" :style="{ 'background-image': 'url(./gamedata/resources/views/' + card.type + '-white.png)' }"></div>
     <div class="font-larger line-height-fix">
       <div>
         <Info v-if="resource?.hunting" :tooltip="'Requires ' + resource?.peopleCost + ' hunting in total to get'">

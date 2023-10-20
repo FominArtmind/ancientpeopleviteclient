@@ -1,5 +1,5 @@
 <template>
-  <div class="inline" data-te-toggle="tooltip" v-bind:title="tooltip">
+  <div class="inline" :v-tooltip="tooltip">
     <slot />
   </div>
 </template>
