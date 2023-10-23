@@ -18,7 +18,7 @@ export interface Deck {
 export interface PlayerState {
   playingCard: boolean
   passed?: boolean
-  leadership: []
+  leadership: number[]
   unity: string
   migrationChoose: Card[]
   pathfindingChoose?: boolean

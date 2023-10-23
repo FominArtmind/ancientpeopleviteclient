@@ -501,9 +501,81 @@ socket.on("done", () => {
   actionPerformed.value = false;
   console.log("Socket done");
 });
-socket.on("rejected", (err: string) => {
+socket.on("rejected", (err: string | { error: string, code: number }) => {
   actionPerformed.value = false;
-  alert(err);
+  const error = err as { error: string, code: number };
+  if(error.code) {
+    let message = "";
+    switch(error.code) {
+      case 1:
+        message = "Incorrect action type";
+        break;
+      case 2:
+        message = "It's not your turn";
+        break;
+      case 3:
+        message = "Forbidden";
+        break;
+      case 4:
+        message = "Card not found";
+        break;
+      case 5:
+        message = "Not enough leadership";
+        break;
+      case 6:
+        message = "Hunt is empty";
+        break;
+      case 7:
+        message = "Invalid hunt";
+        break;
+      case 8:
+        message = "Some units can't perform hunt";
+        break;
+      case 9:
+        message = "Not enough hunters";
+        break;
+      case 10:
+        message = "Must play card before passing";
+        break;
+      case 11:
+        message = "Not enough food";
+        break;
+      case 12:
+        message = "Culture level is not enough";
+        break;
+      case 13:
+        message = "Invalid upgrade";
+        break;
+      case 14:
+        message = "Must choose migration card";
+        break;
+      case 15:
+        message = "Raid is empty";
+        break;
+      case 16:
+        message = "Units can't raid";
+        break;
+      case 17:
+        message = "Invalid raid target";
+        break;
+      case 18:
+        message = "Can't upgrade to the same card";
+        break;
+      case 19:
+        message = "Must chose sociality cards";
+        break;
+      case 4:
+        message = "Incorrect sociality cards number";
+        break;
+      default:
+        message = "Unknown error";
+    }
+
+    alert(message);
+  }
+  else {
+    alert(err);
+  }
   console.log("Socket rejected", err);
 });
 socket.on("error", (err: string) => {
