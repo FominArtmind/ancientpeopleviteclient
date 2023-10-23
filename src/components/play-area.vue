@@ -179,7 +179,9 @@ function processHeroCardClicked(card: Card | VillageCard, location: "village" | 
   if(!actionPerformed.value) {
     if(heroTurn.value && !hero.value.state.pathfindingChoose) {
       if(hero.value.state.playingCard) {
-        play((card as Card).id);
+        if(location === "hand") {
+          play((card as Card).id);
+        }
       }
       else if(hero.value.state.sociality) {
         if(location === "hand") {
@@ -196,12 +198,12 @@ function processHeroCardClicked(card: Card | VillageCard, location: "village" | 
       else {
         if(location === "hand") {
           const hcard = card as Card;
-          if(hero.value.state.playingCard) {
-            console.log("hero plays", hcard.type);
+
+          if(hcard.type === hero.value.state.unity) {
+            play((card as Card).id);
           }
-          else {
-            // check for leadership, unity hero.value.state.leadership
-            console.log("hero plays leadership/unity or wrong card", hcard.type);
+          else if(hero.value.state.leadership?.length) {
+            play((card as Card).id);
           }
         }
         else if(location === "village") {
