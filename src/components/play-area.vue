@@ -1,49 +1,54 @@
 <template>
   <div class="min-h-screen border-l-2 border-white flex justify-between flex-col" @contextmenu="openMenu">
-    <ul id="right-click-menu" tabindex="-1" ref="menu" v-if="viewMenu" class="focus:outline-none" :style="positionStyle" @blur="closeMenu">
-      <template v-for="action of menuActions">
-        <li v-if="action.type === 'hint'">
-          <i>{{ action.hint }}</i>
-        </li>
-        <li v-else-if="action.type === 'done'" class="menu-action" @click="selectSocialityCardsToReturn">
-          Done selection
-        </li>
-        <li v-else-if="action.type === 'hunt'" class="menu-action" @click="hunt">
-          Hunt
-        </li>
-        <li v-else-if="action.type === 'raid'" class="menu-action" @click="raid(action.aimPlayer as string)">
-          Raid {{ action.aimPlayer }}
-        </li>
-        <li v-else-if="action.type === 'buy'" class="menu-action" @click="buy">
-          <ChatValue :value="'Buy'" />
-          <ArtIcon :type="action.aim ? action.aim[0].type : ''" />
-        </li>
-        <li v-else-if="action.type === 'upgrade'" class="menu-action" @click="upgrade">
-          <ChatValue :value="'Upgrade'" />
-          <ArtIcon :type="action.source ? action.source[0].type : ''" />
-          <ChatValue :value="'to'" />
-          <ArtIcon :type="action.aim ? action.aim[0].type : ''" />
-        </li>
-        <li v-else-if="action.type === 'develop'" class="menu-action" @click="develop">
-          <ChatValue :value="'Develop to'" />
-          <ArtIcon :type="action.aim ? action.aim[0].type : ''" :kind="'development'" />
-        </li>
-        <li v-else-if="action.type === 'pass'" class="menu-action" @click="pass">
-          Pass
-        </li>
-        <li v-else>
-          NOT SUPPORTED ACTION
-        </li>
-      </template>
-    </ul>
-    <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
-    </div>
-    <div v-if="gameLoaded && opponents.length > 0" class="flex">
-      <Opponent v-for="opponent in opponents" :player="opponent" />
-    </div>
-    <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
-    <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
-    <Hero v-if="gameLoaded" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
+    <template v-if="!gameFinished">
+      <ul id="right-click-menu" tabindex="-1" ref="menu" v-if="viewMenu" class="focus:outline-none" :style="positionStyle" @blur="closeMenu">
+        <template v-for="action of menuActions">
+          <li v-if="action.type === 'hint'">
+            <i>{{ action.hint }}</i>
+          </li>
+          <li v-else-if="action.type === 'done'" class="menu-action" @click="selectSocialityCardsToReturn">
+            Done selection
+          </li>
+          <li v-else-if="action.type === 'hunt'" class="menu-action" @click="hunt">
+            Hunt
+          </li>
+          <li v-else-if="action.type === 'raid'" class="menu-action" @click="raid(action.aimPlayer as string)">
+            Raid {{ action.aimPlayer }}
+          </li>
+          <li v-else-if="action.type === 'buy'" class="menu-action" @click="buy">
+            <ChatValue :value="'Buy'" />
+            <ArtIcon :type="action.aim ? action.aim[0].type : ''" />
+          </li>
+          <li v-else-if="action.type === 'upgrade'" class="menu-action" @click="upgrade">
+            <ChatValue :value="'Upgrade'" />
+            <ArtIcon :type="action.source ? action.source[0].type : ''" />
+            <ChatValue :value="'to'" />
+            <ArtIcon :type="action.aim ? action.aim[0].type : ''" />
+          </li>
+          <li v-else-if="action.type === 'develop'" class="menu-action" @click="develop">
+            <ChatValue :value="'Develop to'" />
+            <ArtIcon :type="action.aim ? action.aim[0].type : ''" :kind="'development'" />
+          </li>
+          <li v-else-if="action.type === 'pass'" class="menu-action" @click="pass">
+            Pass
+          </li>
+          <li v-else>
+            NOT SUPPORTED ACTION
+          </li>
+        </template>
+      </ul>
+      <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
+      </div>
+      <div v-if="gameLoaded && opponents.length > 0" class="flex">
+        <Opponent v-for="opponent in opponents" :player="opponent" />
+      </div>
+      <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
+      <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
+      <Hero v-if="gameLoaded" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
+    </template>
+    <template v-if="gameFinished">
+      <Stats />
+    </template>
   </div>
 </template>
 
@@ -100,7 +105,7 @@
 import { ref, ComputedRef, computed, nextTick } from "vue";
 import { Card, VillageCard, Player, Action } from "../types/game";
 import { MenuAction } from "../types/menu-action";
-import { nickname, gameLoaded, game, selection, actionPerformed, performAction } from "../composables/state";
+import { nickname, gameLoaded, gameFinished, game, selection, actionPerformed, performAction } from "../composables/state";
 import { clone } from "../utils/clone";
 import ArtIcon from "./art-icon.vue";
 import ChatValue from "./chat-value.vue";

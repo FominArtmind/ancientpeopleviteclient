@@ -2,6 +2,7 @@ import { ref } from "vue";
 
 import { GeneralEvent } from "../types/events";
 import { Card, VillageCard, Game, Action } from "../types/game";
+import { Statistics } from "../types/statistics";
 
 // @ts-ignore
 import io from "socket.io-client";
@@ -28,6 +29,7 @@ export const nickname = ref<string>(localStorage.getItem("nickname") || "Arseniy
 export const actionPerformed = ref(false);
 
 export const gameLoaded = ref(false);
+export const gameFinished = ref(false);
 export const game = ref<Game>({
   id: "id",
   version: "192",
@@ -208,6 +210,8 @@ export const hand = ref<Card[]>([
 ]);
 
 export const events = ref<GeneralEvent[]>([]);
+
+export const stat = ref<Statistics>();
 //[
 //   {
 //     type: "turn",
@@ -494,8 +498,11 @@ socket.on("chat", (data: { nickname: string, message: string }) => {
     text: data.message
   });
 });
-socket.on("stat", (stat: any) => {
-  console.log("Socket stat", stat);
+socket.on("stat", (stats: any) => {
+  console.log("Socket stat", stats);
+  stat.value = stats;
+
+  gameFinished.value = true;
 });
 socket.on("done", () => {
   actionPerformed.value = false;
