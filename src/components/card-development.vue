@@ -1,7 +1,7 @@
 <template>
   <CardBody :selected="selected">
     <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/actions/views/' + card.type + '-white.png)' }">
-      <v-tooltip activator="parent" location="bottom" width="200px">{{ development?.title }}</v-tooltip>
+      <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="1000">{{ development?.title }}</v-tooltip>
     </div>
     <div class="font-larger line-height-fix">
       <Info :tooltip="`Requires ${development?.foodCost} food to gain`">

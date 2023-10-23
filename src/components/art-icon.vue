@@ -1,6 +1,6 @@
 <template>
   <div class="bg-contain bg-no-repeat text-center w-12 h-8 inline-block" :style="{ 'background-image': 'url(./gamedata/' + (kind === 'resource' ? 'resources' : (kind === 'development' ? 'actions' : 'units')) + '/views/' + type + '-icon-white.png)' }">
-    <v-tooltip activator="parent" location="bottom" width="200px">{{ type }}</v-tooltip>
+    <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="1000">{{ type }}</v-tooltip>
   </div>
 </template>
 

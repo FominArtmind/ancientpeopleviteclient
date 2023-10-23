@@ -2,7 +2,7 @@
   <CardBody :selected="selected">
     <h3 v-if="player" class="player-nick">{{ player }}</h3>
     <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/resources/views/' + card.type + '-white.png)' }">
-      <v-tooltip activator="parent" location="bottom" width="200px">{{ resource?.title }}</v-tooltip>
+      <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="1000">{{ resource?.title }}</v-tooltip>
     </div>
     <div class="font-larger line-height-fix">
       <div>

@@ -48,6 +48,6 @@ onMounted(() => {
   scrollToLastChatItem();
 });
 
-watch(events, scrollToLastChatItem, { deep: true });
+watch(events, scrollToLastChatItem, { deep: true, flush: "post" });
 
 </script>
