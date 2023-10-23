@@ -150,6 +150,21 @@
       <ArtIcon v-for="_n in event.number" :type="event.unit" />
       <ChatValue :value="'to their hand'" />
     </template>
+    <template v-else-if="event.type === 'mentoring'">
+      <ChatValue :value="event.actor" />
+      <div class="mx-2"></div>
+      <template v-if="event.added?.length">
+        <ChatValue :value="'added'" />
+        <ArtIcon v-for="unit in event.added" :type="unit" />
+        <ChatValue :value="'to village'" />
+      </template>
+      <template v-if="event.removed?.length">
+        <ChatValue :value="'moved'" />
+        <ArtIcon v-for="unit in event.removed" :type="unit" />
+        <ChatValue :value="'to cultural layer'" />
+      </template>
+      <ChatValue :value="'due to mentoring'" />
+    </template>
     <template v-else-if="event.type === 'village'">
       <ChatValue :value="event.actor" />
       <div class="mx-2"></div>

@@ -141,6 +141,13 @@ export interface CommunityEvent {
   number: number
 }
 
+export interface MentoringEvent {
+  type: "mentoring"
+  actor: string
+  added: string[]
+  removed: string[]
+}
+
 export interface VillageEvent {
   type: "village"
   actor: string
@@ -193,6 +200,8 @@ export interface GeneralEvent {
   foodLost?: number
   cultureGain?: number
   cultureLost?: number 
+  added?: string[]
+  removed?: string[]
   text?: string
   turn?: number
   phase?: "living" | "development"
