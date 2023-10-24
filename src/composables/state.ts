@@ -571,7 +571,7 @@ socket.on("rejected", (err: string | { error: string, code: number }) => {
       case 19:
         message = "Must chose sociality cards";
         break;
-      case 4:
+      case 20:
         message = "Incorrect sociality cards number";
         break;
       default:
