@@ -5,7 +5,7 @@
       <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="1000">{{ resource?.title }}</v-tooltip>
     </div>
     <div class="font-larger line-height-fix">
-      <div>
+      <div class="font-size-fix">
         <Info v-if="resource?.hunting" :tooltip="'Requires ' + resource?.peopleCost + ' hunting in total to get'">
           <Icon v-for="_n in resource?.peopleCost" name="mdi:arrow-up-thin"/>
         </Info>
@@ -39,6 +39,10 @@
 
 .info-padding {
   margin-top: 5%;
+}
+
+.font-size-fix {
+  font-size: smaller;
 }
 </style>
 
