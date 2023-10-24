@@ -113,6 +113,7 @@ import Opponent from "./opponent.vue";
 import Resources from "./resources.vue";
 import Draft from "./draft.vue";
 import Hero from "./hero.vue";
+import Stats from "./stats.vue";
 
 const menu = ref<HTMLUListElement>();
 const viewMenu = ref(false);

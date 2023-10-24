@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center overflow-y-scroll">
+  <div class="text-center h-screen overflow-y-scroll">
     <h1>Game results</h1>
     <hr />
     <h2>General</h2>
@@ -154,7 +154,7 @@
     <div class="row">
       <div v-for="resource in stat?.resources" class="col-xs-6 col-sm-4 col-md-3">
         <div class="not-selected">
-          <resource-card type="resource.type" data="dataResources[resource.type]"></resource-card>
+          <CardResource :card="{ type: resource.type, id: 0 }" />
         </div>
         <div class="text-center">
           <h4>Opened: {{resource.opened}}</h4>
@@ -170,10 +170,10 @@
     <div class="row">
       <div v-for="card in stat?.putAsideCards" class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
         <div class="not-selected">
-          <unit-card type="card.type" data="dataUnits[card.type]"></unit-card>
+          <CardUnit :card="{ type: card.type, id: 0 }" />
         </div>
         <div class="text-center">
-          <h4 class="bold">x {{card.count}}</h4>
+          <h4 class="font-semibold">x {{card.count}}</h4>
         </div>
       </div>				
     </div>
@@ -181,10 +181,10 @@
     <div class="row">
       <div v-for="card in stat?.draftCards" class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
         <div class="not-selected">
-          <unit-card type="card.type" data="dataUnits[card.type]"></unit-card>
+          <CardUnit :card="{ type: card.type, id: 0 }" />
         </div>
         <div class="text-center">
-          <h4 class="bold">x {{card.count}}</h4>
+          <h4 class="font-semibold">x {{card.count}}</h4>
         </div>
       </div>				
     </div>
@@ -192,10 +192,10 @@
     <div class="row">
       <div v-for="card in stat?.developmentCards" class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
         <div class="not-selected">
-          <development-card type="card.type" data="dataDevelopments[card.type]"></development-card>
+          <CardDevelopment :card="{ type: card.type, id: 0 }" />
         </div>
         <div class="text-center">
-          <h4 class="bold">Done: {{card.count}}</h4>
+          <h4 class="font-semibold">Done: {{card.count}}</h4>
         </div>
       </div>				
     </div>
@@ -217,7 +217,7 @@
         </tr>
         <tr>
           <td>
-          <unit-card type="card.type" data="dataUnits[card.type]"></unit-card>
+          <CardUnit :card="{ type: card.type, id: 0 }" />
           </td>migrationChoice
           <td>{{card.drafted}}</td>
           <td>{{card.taken}}</td>
@@ -232,18 +232,46 @@
       </tbody>
     </table>
     <hr />
-    <button class="btn btn-lg btn-primary inline" ng-click="returnToLobby()">Return to lobby</button>
+    <button class="bg-ancient-600 hover:bg-ancient-500 rounded-none text-white ml-2 py-1 px-4 focus:outline-none focus:shadow-outline w-full" type="button" @click="returnToLobby">Return to lobby</button>
     <hr />
   </div>
 </template>
 
 <style scoped>
+h1 {
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+th {
+  padding: 0.25rem;
+}
+td {
+  padding: 0.25rem;
+}
+hr {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+.table {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
 </style>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { game, stat } from "../composables/state";
 import { Statistics } from "../types/statistics";
+import Icon from "./icon.vue";
+import CardResource from "./card-resource.vue";
+import CardUnit from "./card-unit.vue";
+import CardDevelopment from "./card-development.vue";
 
 const timeString = (ms: number) => {
   let sec = Math.round(ms / 1000);
@@ -266,5 +294,9 @@ const times = computed(() => {
 
   return times;
 });
+
+const returnToLobby = () => {
+  location.replace("https://ancient-people.herokuapp.com/#/lobby");
+};
 
 </script>
