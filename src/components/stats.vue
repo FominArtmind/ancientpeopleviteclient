@@ -145,14 +145,12 @@
             <h4 v-for="unit in player.deck">{{unit.type}}: <b>x {{unit.count}}</b></h4>
           </td>
         </tr>
-        <tr>
-          <td :colspan="(stat?.players?.length || 1) + 1"></td>
-        </tr>
       </tbody>
-    </table>		
+    </table>
+    <hr />
     <h2>Resources</h2>
-    <div class="row">
-      <div v-for="resource in stat?.resources" class="col-xs-6 col-sm-4 col-md-3">
+    <div class="grid grid-cols-8 gap-1 ml-1 mr-1">
+      <div v-for="resource in stat?.resources">
         <div class="not-selected">
           <CardResource :card="{ type: resource.type, id: 0 }" />
         </div>
@@ -166,9 +164,9 @@
     </div>
     <hr />
     <h2>Draft</h2>
-    <h3>Put aside cards</h3>
-    <div class="row">
-      <div v-for="card in stat?.putAsideCards" class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
+    <h3 class="mb-2 mt-2">Put aside cards</h3>
+    <div class="grid grid-cols-8 gap-1 ml-1 mr-1">
+      <div v-for="card in stat?.putAsideCards">
         <div class="not-selected">
           <CardUnit :card="{ type: card.type, id: 0 }" />
         </div>
@@ -177,9 +175,9 @@
         </div>
       </div>				
     </div>
-    <h3>Draft cards</h3>
-    <div class="row">
-      <div v-for="card in stat?.draftCards" class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
+    <h3 class="mb-2 mt-2">Draft cards</h3>
+    <div class="grid grid-cols-8 gap-1 ml-1 mr-1">
+      <div v-for="card in stat?.draftCards">
         <div class="not-selected">
           <CardUnit :card="{ type: card.type, id: 0 }" />
         </div>
@@ -188,9 +186,9 @@
         </div>
       </div>				
     </div>
-    <h3>Development cards</h3>
-    <div class="row">
-      <div v-for="card in stat?.developmentCards" class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
+    <h3 class="mb-2 mt-2">Development cards</h3>
+    <div class="grid grid-cols-8 gap-1 ml-1 mr-1">
+      <div v-for="card in stat?.developmentCards">
         <div class="not-selected">
           <CardDevelopment :card="{ type: card.type, id: 0 }" />
         </div>
@@ -216,9 +214,7 @@
           <th><span class="icon-fix"><Icon name="mdi:fire"/></span></th>
         </tr>
         <tr>
-          <td>
-          <CardUnit :card="{ type: card.type, id: 0 }" />
-          </td>migrationChoice
+          <td class="unit-cell"><CardUnit :card="{ type: card.type, id: 0 }" /></td>
           <td>{{card.drafted}}</td>
           <td>{{card.taken}}</td>
           <td>{{card.removed}}</td>
@@ -232,7 +228,7 @@
       </tbody>
     </table>
     <hr />
-    <button class="bg-ancient-600 hover:bg-ancient-500 rounded-none text-white ml-2 py-1 px-4 focus:outline-none focus:shadow-outline w-full" type="button" @click="returnToLobby">Return to lobby</button>
+    <button class="bg-ancient-600 hover:bg-ancient-500 rounded-none text-white py-1 px-4 focus:outline-none focus:shadow-outline return-button" type="button" @click="returnToLobby">Return to lobby</button>
     <hr />
   </div>
 </template>
@@ -240,27 +236,40 @@
 <style scoped>
 h1 {
   font-size: 2rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 h2 {
   font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 h3 {
   font-size: 1.25rem;
 }
 th {
   padding: 0.25rem;
+  border: 1px white solid;
 }
 td {
   padding: 0.25rem;
+  border: 1px white solid;
 }
 hr {
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
 }
 .table {
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.unit-cell {
+  min-width: 150px;
+}
+
+.return-button {
+  width: calc(80vw - 48px);
 }
 </style>
 
@@ -296,7 +305,7 @@ const times = computed(() => {
 });
 
 const returnToLobby = () => {
-  location.replace("https://ancient-people.herokuapp.com/#/lobby");
+  window.location.href = "/#/lobby";
 };
 
 </script>
