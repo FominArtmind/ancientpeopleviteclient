@@ -38,6 +38,9 @@ export interface Unit {
   fishing?: number
   raidFoodSteal?: number
   properties?: UnitProperties
+  openBonus?: { // used only for totems invention now
+    culture: number
+  }
   villageAction?: {
     food?: number
     culture?: number
