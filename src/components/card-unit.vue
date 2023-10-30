@@ -157,10 +157,13 @@ const unit = computed((): UnitIC => {
   const u = unitCard(props.card.type);
   const result: any = JSON.parse(JSON.stringify(u));
 
+  console.log("Unit origin", u);
+  console.log("Unit invention changes", inventionChanges.value[props.card.type]);
+
   const fillInICValue = (fieldPath: string[], field: string) => {
     let unitObj: any = JSON.parse(JSON.stringify(u));
     let obj = result;
-    let origin: any = JSON.parse(JSON.stringify(inventionChanges.value[props.card.type]));
+    let origin: any = inventionChanges.value[props.card.type] ? JSON.parse(JSON.stringify(inventionChanges.value[props.card.type])) : {};
     for(const part of fieldPath) {
       if(!obj[part]) {
         obj[part] = {};
@@ -193,6 +196,8 @@ const unit = computed((): UnitIC => {
   fillInICValue(["villageAction"], "food");
   fillInICValue(["villageAction"], "culture");
   fillInICValue([], "cultureValue");
+
+  console.log("Unit", result);
 
   return result as UnitIC;
 });
