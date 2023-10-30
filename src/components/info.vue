@@ -1,6 +1,6 @@
 <template>
-  <div class="inline">
-    <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="1000">{{ tooltip }}</v-tooltip>
+  <div class="inline" :class="{ 'invention-changed': changed }">
+    <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="750">{{ tooltip + (changed ? " (changed by current invention)" : "") }}</v-tooltip>
     <slot />
   </div>
 </template>
@@ -9,6 +9,6 @@
 </style>
 
 <script setup lang="ts">
-defineProps<{ tooltip: string }>();
+defineProps<{ tooltip: string, changed?: boolean }>();
 
 </script>

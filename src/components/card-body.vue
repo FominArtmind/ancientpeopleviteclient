@@ -1,6 +1,6 @@
 <template>
   <div class="card-container" :class="{ 'rotated': rotated }">
-    <v-tooltip v-if="rotated" activator="parent" location="bottom" max-width="200px" open-delay="1000">Rotated: can't defend raids and raid themselves, can't perform site actions</v-tooltip>
+    <v-tooltip v-if="rotated" activator="parent" location="bottom" max-width="200px" open-delay="750">Rotated: can't defend raids and raid themselves, can't perform site actions</v-tooltip>
     <div class="w-full h-full card-background">
       <div class="w-full h-full p-1 card text-center" :class="{ 'card-suggested': suggested, 'card-selected': selected }">
         <slot />

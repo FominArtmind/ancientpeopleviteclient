@@ -97,5 +97,9 @@ body {
 }
 
 .active-player {
-  color: #b7ff57
+  color: #b7ff57;
+}
+
+.invention-changed {
+  color: #ffd841;
 }

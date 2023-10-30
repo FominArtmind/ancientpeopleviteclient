@@ -1,11 +1,11 @@
 <template>
   <CardBody :selected="selected">
     <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/actions/views/' + card.type + '-white.png)' }">
-      <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="1000">{{ development?.title }}</v-tooltip>
+      <v-tooltip activator="parent" location="bottom" max-width="200px" open-delay="750">{{ development?.title }}</v-tooltip>
     </div>
     <div class="font-larger line-height-fix">
-      <Info :tooltip="`Requires ${development?.foodCost} food to gain`">
-        <span>{{ development?.foodCost }}</span>
+      <Info :tooltip="`Requires ${foodCostIC.value} food to gain`" :changed="foodCostIC.changed">
+        <span>{{ foodCostIC.value }}</span>
         <span class="icon-fix"><Icon name="mdi:food-drumstick"/></span>
       </Info>
       <span class="icon-fix transform-icon"><Icon name="mdi:arrow-right-bold-outline"/></span>
@@ -43,8 +43,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Card } from "../types/game";
+import { Development } from "../types/development";
 import { developmentCard } from "../composables/content";
-import { selection } from "../composables/state";
+import { selection, inventionChanges } from "../composables/state";
 import CardBody from "./card-body.vue";
 import Info from "./info.vue";
 import Icon from "./icon.vue";
@@ -53,6 +54,14 @@ const props = defineProps<{ card: Card }>();
 
 const development = computed(() => {
   return developmentCard(props.card.type);
+});
+
+const foodCostIC = computed(() => {
+  const foodCost = (inventionChanges.value[props.card.type] as Development)?.foodCost;
+  if(foodCost !== undefined) {
+    return { changed: true, value: foodCost };
+  }
+  return { changed: false, value: development.value.foodCost };
 });
 
 const selected = computed(() => {
