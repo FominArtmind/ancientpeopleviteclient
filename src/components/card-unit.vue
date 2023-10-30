@@ -116,10 +116,8 @@
 import { computed } from "vue";
 import { Card } from "../types/game";
 import { UnitProperties } from "../types/unit";
-import { unitCard } from "../composables/content";
-import { inventionChanges, selection } from "../composables/state";
+import { inventionChangedUnitCards, selection } from "../composables/state";
 import { capitalize } from "../utils/capitalize";
-import { clone } from "../utils/clone";
 import CardBody from "./card-body.vue";
 import Info from "./info.vue";
 import Icon from "./icon.vue";
@@ -155,52 +153,7 @@ interface UnitIC {
 }
 
 const unit = computed((): UnitIC => {
-  const u = unitCard(props.card.type);
-  const result: any = clone(u);
-
-  console.log("Unit origin", u);
-  console.log("Unit invention changes", inventionChanges.value[props.card.type]);
-
-  const fillInICValue = (fieldPath: string[], field: string) => {
-    let unitObj: any = clone(u);
-    let obj = result;
-    let origin: any = inventionChanges.value[props.card.type] ? clone(inventionChanges.value[props.card.type]) : {};
-    for(const part of fieldPath) {
-      if(!obj[part]) {
-        obj[part] = {};
-      }
-      if(!unitObj[part]) {
-        unitObj[part] = {};
-      }
-      if(!origin[part]) {
-        origin[part] = {};
-      }
-      obj = obj[part];
-      unitObj = unitObj[part];
-      origin = origin[part];
-    }
-    
-    obj[field] = origin[field] !== undefined ? { value: origin[field], changed: true } : { value: unitObj[field], changed: false };
-  };
-
-  fillInICValue([], "foodCost");
-  fillInICValue([], "cultureLevel");
-  fillInICValue([], "attack");
-  fillInICValue([], "defense");
-  fillInICValue([], "cultureExchange");
-  fillInICValue([], "hunting");
-  fillInICValue([], "raidFoodSteal");
-  fillInICValue(["openBonus"], "culture");
-  fillInICValue([], "foodCost");
-  fillInICValue([], "foodCost");
-  fillInICValue([], "foodCost");
-  fillInICValue(["villageAction"], "food");
-  fillInICValue(["villageAction"], "culture");
-  fillInICValue([], "cultureValue");
-
-  console.log("Unit", result);
-
-  return result as UnitIC;
+  return inventionChangedUnitCards.value.find(value => value.title === props.card.type) as UnitIC;
 });
 
 const uprops = computed((): UnitProperties => {

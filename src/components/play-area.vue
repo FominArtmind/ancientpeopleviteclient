@@ -13,7 +13,7 @@
             Hunt
           </li>
           <li v-else-if="action.type === 'raid'" class="menu-action" @click="raid(action.aimPlayer as string)">
-            Raid {{ action.aimPlayer }}
+            Raid {{ action.aimPlayer }} - {{ action.raidChances?.winRate }}% ({{ action.raidChances?.emotion }})
           </li>
           <li v-else-if="action.type === 'buy'" class="menu-action" @click="buy">
             <ChatValue :value="'Buy'" />
@@ -40,7 +40,7 @@
       <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
       </div>
       <div v-if="gameLoaded && opponents.length > 0" class="flex">
-        <Opponent v-for="opponent in opponents" :player="opponent" />
+        <Opponent v-for="opponent in opponents" :player="opponent" :raidChances="opponentRaidChances[opponent.nick]?.chances" :raidFoodGain="opponentRaidChances[opponent.nick]?.foodGain" />
       </div>
       <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
       <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
@@ -104,8 +104,8 @@
 <script setup lang="ts">
 import { ref, ComputedRef, computed, nextTick } from "vue";
 import { Card, VillageCard, Player, Action } from "../types/game";
-import { MenuAction } from "../types/menu-action";
-import { nickname, gameLoaded, gameFinished, game, selection, actionPerformed, performAction } from "../composables/state";
+import { RaidChances, MenuAction } from "../types/menu-action";
+import { nickname, gameLoaded, gameFinished, game, selection, actionPerformed, performAction, UnitIC, inventionChangedUnitCards } from "../composables/state";
 import { clone } from "../utils/clone";
 import ArtIcon from "./art-icon.vue";
 import ChatValue from "./chat-value.vue";
@@ -141,6 +141,8 @@ const opponents = computed(() => {
   }
   return opps;
 });
+
+const opponentRaidChances = ref<{[name: string]: { chances: RaidChances, foodGain: number }}>({});
 
 const heroTurn = computed(() => {
   return game.value.state.players[game.value.state.actor].nick === nickname.value;
@@ -382,13 +384,61 @@ const menuActions: ComputedRef<MenuAction[]> = computed(() => {
             hint: "Rotated cards can't raid"
           })
         }
-        else {
+        else if(selection.value.village.length > 0) {
+          const attackers = selection.value.village.length;
+          let attack = 0;
+          let cultureExchange = 0;
+          let valor = 0;
+          let raidFoodSteal = 0;
+          let sneak = 0;
+
+          for(const villageCard of selection.value.village) {
+            const unit = inventionChangedUnitCards.value.find(value => value.title === villageCard.card.type) as UnitIC;
+            
+            attack += unit.attack?.value || 0;
+            cultureExchange += unit.cultureExchange?.value || 0;
+            valor += unit?.properties?.valor || 0;
+            raidFoodSteal += unit?.raidFoodSteal?.value || 0;
+            sneak += unit?.properties?.sneak || 0;
+          }
+
+          const invention = game.value.inventions[game.value.state.turn - 1];
+
           for(const opp of opponents.value) {
+            const defendingVillage = opp.village.filter(value => !value.rotated);
+            const defenders = defendingVillage.length;
+
+            let defense = 0;
+            let cultureValue = 0;
+            let cultureResistance = false;
+            let hideaway = 0;
+
+            for(const villageCard of defendingVillage) {
+              const unit = inventionChangedUnitCards.value.find(value => value.title === villageCard.card.type) as UnitIC;
+              
+              defense += unit.defense?.value || 0;
+              cultureValue += unit.cultureValue?.value || 0;
+              if(unit.properties?.cultureResistance) {
+                cultureResistance = true;
+              }
+              hideaway += unit.properties?.hideaway || 0;
+            }
+            let effectiveCultureExchange = cultureExchange += valor * defenders;
+            if(cultureResistance) {
+              effectiveCultureExchange = Math.min(0, cultureExchange - attackers);
+            }
+
+            const availableFood = invention !== "dog" ? Math.max(0, opp.food - hideaway) : 0;
+            const foodGain = Math.min(availableFood, raidFoodSteal) + sneak * defenders;
+
+            const chances = raidChances(attackers, attack, defenders, defense, 0, 0, effectiveCultureExchange, cultureValue);
+            opponentRaidChances.value[opp.nick] = { chances, foodGain };
             actions.push({
               type: "raid",
               source: selection.value.village.map(value => value.card),
               aim: opp.village.filter(value => !value.rotated).map(value => value.card),
-              aimPlayer: opp.nick
+              aimPlayer: opp.nick,
+              raidChances: chances
             });
           }
         }
@@ -547,6 +597,152 @@ function develop() {
     source: [],
     aim: [selection.value.development?.id as number]
   });
+}
+
+function raidChances(attackersCount: number, extraAttack: number, defendersCount: number, extraDefense: number, attackersBonus: number, defendersBonus: number, cultureExchange: number, cultureValue: number): RaidChances {
+  var NORMALIZED_DICE = [0.33333333, 0.5, 0, 0.16666667];
+  
+  var distribution = function(normalizedDice: number[], throwsN: number) {
+    if(throwsN === 0) {
+      return [1.0];
+    }
+    
+    if(throwsN === 1) {
+      return normalizedDice;
+    }
+
+    const distr = distribution(normalizedDice, throwsN - 1);
+
+    const result = [];
+    for(let i = 0; i <= distr.length + normalizedDice.length - 2; i++) {
+      result.push(0);
+    }
+
+    for(let i = 0; i < distr.length; i++) {
+      for(let j = 0; j < normalizedDice.length; j++) {
+        result[i + j] += distr[i] * normalizedDice[j];
+      }
+    }
+
+    return result;
+  }
+
+  const randomAttack = attackersCount + attackersBonus;
+  const randomDefense = defendersCount + defendersBonus;
+  const attackDitribution = distribution(NORMALIZED_DICE, randomAttack);
+  const defenseDistribution = distribution(NORMALIZED_DICE, randomDefense);
+
+  let winRate = 0.0;
+
+  if(attackersCount > defendersCount) {
+    for(let i = 0; i < attackDitribution.length; i++) {
+      for(let j = 0; j <= i + extraAttack - extraDefense && j < defenseDistribution.length; j++) {
+        winRate += attackDitribution[i] * defenseDistribution[j];
+      }
+    }
+  }
+  else {
+    for(let i = 0; i < attackDitribution.length; i++) {
+      for(let j = 0; j < i + extraAttack - extraDefense && j < defenseDistribution.length; j++) {
+        winRate += attackDitribution[i] * defenseDistribution[j];
+      }
+    }
+  }
+
+  const roundedWinLoseRates = (winRate: number) => {
+    let w: number, l: number;
+
+    if(winRate < 0.0001) {
+      w = 0;
+      l = 100;
+    }
+    else if(winRate > 0.9999) {
+      w = 100;
+      l = 0;
+    }
+    else if(winRate < 0.01) {
+      l = Math.round((1 - winRate) * 10000.0) / 100.0;
+      w = Math.round(winRate * 10000.0) / 100.0;
+    }
+    else if(winRate > 0.99) {
+      l = Math.round((1 - winRate) * 10000.0) / 100.0;
+      w = Math.round(winRate * 10000.0) / 100.0;
+    }
+    else {
+      w = Math.round(winRate * 1000.0) / 10.0;
+      l = Math.round((100 - winRate) * 10.0) / 10.0;
+    }
+
+    return { winRate: w, loseRate: l };
+  }
+
+  interface CultureGainChances {
+    win: {[culture: number]: number }
+    lose: {[culture: number]: number }
+  }
+  const cultureGainChancesMap: CultureGainChances = {
+    win: {},
+    lose: {}
+  };
+
+  for(let i = 0; i < attackDitribution.length; i++) {
+    for(let j = 0; j < defenseDistribution.length; j++) {
+      const diff = (i + extraAttack) - (j + extraDefense);
+      const success = (attackersCount > defendersCount) ? diff >= 0 : diff > 0;
+
+      const cultureGain = Math.min(Math.max(0, (i + extraAttack) - (j + extraDefense) + cultureExchange), cultureValue);
+
+      if(success) {
+        if(cultureGainChancesMap.win[cultureGain] === undefined) {
+          cultureGainChancesMap.win[cultureGain] = attackDitribution[i] * defenseDistribution[j];
+        }
+        else {
+          cultureGainChancesMap.win[cultureGain] += attackDitribution[i] * defenseDistribution[j];
+        }
+      }
+      else {
+        if(cultureGainChancesMap.lose[cultureGain] === undefined) {
+          cultureGainChancesMap.lose[cultureGain] = attackDitribution[i] * defenseDistribution[j];
+        }
+        else {
+          cultureGainChancesMap.lose[cultureGain] += attackDitribution[i] * defenseDistribution[j];
+        }
+      }
+    }
+  }
+
+  const winCultureGainArray = Object.entries(cultureGainChancesMap.win).map(value => ({ culture: parseInt(value[0], 10), chance: roundedWinLoseRates(value[1]).winRate }));
+  winCultureGainArray.sort((a, b) => a.culture - b.culture);
+  const loseCultureGainArray = Object.entries(cultureGainChancesMap.lose).map(value => ({ culture: parseInt(value[0], 10), chance: roundedWinLoseRates(value[1]).winRate }));
+  loseCultureGainArray.sort((a, b) => a.culture - b.culture);
+
+  const roundedRates = roundedWinLoseRates(winRate);
+
+  const emotionalDescription = (winRate: number) => {
+    if(winRate === 100) {
+      return { color: "green", emotion: "Pure" };
+    }
+    else if(winRate >= 85) {
+      return { color: "light-green", emotion: "Sure" };
+    }
+    else if(winRate >= 55) {
+      return { color: "yellow", emotion: "Risky" };
+    }
+    else if(winRate >= 45) {
+      return { color: "orange", emotion: "Equal" };
+    }
+    else if(winRate >= 15) {
+      return { color: "orange", emotion: "Fishy" };
+    }
+    else if(winRate >= 0) {
+      return { color: "red", emotion: "Cruel" };
+    }
+    else {
+      return { color: "red", emotion: "WASTED" };
+    }
+  };
+
+  return { winRate: roundedRates.winRate, loseRate: roundedRates.loseRate, winCultureGainArray, loseCultureGainArray, ...emotionalDescription(roundedRates.winRate) };
 }
 
 </script>

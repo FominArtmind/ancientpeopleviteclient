@@ -8,7 +8,7 @@
             {{ player.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span>
             <!-- {{ player.awayCardsCount }}<span class="icon-fix"><Icon name="bi:people"/></span> -->
             {{ player.handSize }}<span class="icon-fix"><Icon name="mdi:cards"/></span>
-            - <span class="icon-fix"><Icon name="mdi:axe"/></span> {{ raidChance }}
+            <span v-if="raidChances"> - <span class="icon-fix"><Icon name="mdi:axe"/></span> {{ raidChances.winRate }}%</span>
             <!--  - {{ timeSpent }} -->
           </h1>
         </template>
@@ -20,7 +20,19 @@
             <div>Hand Size: {{ player.handSize }}</div>
             <div>Deck Size: {{ player.deckSize }}</div>
             <div>Away Cards: {{ player.awayCardsCount }}</div>
-            <div>Raid success chance: {{ raidChance }}</div>
+            <div v-if="raidChances">
+              <div>Raid success chance: {{ raidChances.winRate }}% ({{ raidChances.emotion }})</div>
+              <div class="flex">
+                <div>
+                  <div>Win</div>
+                  <div v-for="item in raidChances.winCultureGainArray">{{raidFoodGain}}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span> {{ item.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span> - {{ item.chance }}%</div>
+                </div>
+                <div>
+                  <div>Lose</div>
+                  <div v-for="item in raidChances.loseCultureGainArray">{{ item.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span> - {{ item.chance }}%</div>
+                </div>
+              </div>
+            </div>
             <div>Time spent: {{ timeSpent }}</div>
           </v-card-text>
           <!--<v-card-actions>
@@ -72,9 +84,9 @@ import { game } from "../composables/state";
 import { DateTime } from "luxon";
 import Icon from "./icon.vue";
 import CardUnit from "./card-unit.vue";
+import { RaidChances } from "../types/menu-action";
 
-const raidChance = ref("97%");
-const props = defineProps<{ player: Player }>();
+const props = defineProps<{ player: Player, raidChances: RaidChances, raidFoodGain: number }>();
 
 const dialog = ref(false);
 

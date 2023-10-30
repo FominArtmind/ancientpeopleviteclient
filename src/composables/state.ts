@@ -1,11 +1,13 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import { GeneralEvent } from "../types/events";
 import { Card, VillageCard, Game, Action } from "../types/game";
+import { UnitProperties } from "../types/unit";
 import { InventionChanges } from "../types/invention-changes";
 import { Statistics } from "../types/statistics";
 import { unitCards, developmentCard } from "../composables/content";
 import { GAME_STUB, HAND_STUB } from "./stubs";
+import { clone } from "../utils/clone";
 
 // @ts-ignore
 import io from "socket.io-client";
@@ -405,4 +407,82 @@ socket.on("error", (err: string) => {
   actionPerformed.value = false;
   alert(err);
   console.log("Socket error", err);
+});
+
+export interface IC {
+  value: number
+  changed: boolean
+}
+
+export interface UnitIC {
+  foodCost: IC
+  cultureLevel?: IC
+  attack?: IC
+  defense?: IC
+  cultureExchange?: IC
+  hunting?: IC
+  fishing?: number
+  raidFoodSteal?: IC
+  properties?: UnitProperties
+  openBonus?: { // used only for totems invention now
+    culture: IC
+  }
+  villageAction?: {
+    food?: IC
+    culture?: IC
+    sacrifice?: boolean
+  }
+  cultureValue: IC
+  unique?: boolean
+  title: string
+}
+
+export const inventionChangedUnitCards = computed(() => {
+  return unitCards().map(u => {
+    const result: any = clone(u);
+
+    console.log("Unit origin", u);
+    console.log("Unit invention changes", inventionChanges.value[u.title]);
+
+    const fillInICValue = (fieldPath: string[], field: string) => {
+      let unitObj: any = clone(u);
+      let obj = result;
+      let origin: any = inventionChanges.value[u.title] ? clone(inventionChanges.value[u.title]) : {};
+      for(const part of fieldPath) {
+        if(!obj[part]) {
+          obj[part] = {};
+        }
+        if(!unitObj[part]) {
+          unitObj[part] = {};
+        }
+        if(!origin[part]) {
+          origin[part] = {};
+        }
+        obj = obj[part];
+        unitObj = unitObj[part];
+        origin = origin[part];
+      }
+      
+      obj[field] = origin[field] !== undefined ? { value: origin[field], changed: true } : { value: unitObj[field], changed: false };
+    };
+
+    fillInICValue([], "foodCost");
+    fillInICValue([], "cultureLevel");
+    fillInICValue([], "attack");
+    fillInICValue([], "defense");
+    fillInICValue([], "cultureExchange");
+    fillInICValue([], "hunting");
+    fillInICValue([], "raidFoodSteal");
+    fillInICValue(["openBonus"], "culture");
+    fillInICValue([], "foodCost");
+    fillInICValue([], "foodCost");
+    fillInICValue([], "foodCost");
+    fillInICValue(["villageAction"], "food");
+    fillInICValue(["villageAction"], "culture");
+    fillInICValue([], "cultureValue");
+
+    console.log("Unit", result);
+
+    return result as UnitIC;
+  });
 });
