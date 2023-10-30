@@ -1,6 +1,7 @@
 import { Resource } from "../types/resource";
 import { Unit } from "../types/unit";
 import { Development } from "../types/development";
+import { clone } from "../utils/clone";
 
 const _cards: { [type: string]: any } = {};
 function loadCards(type: string) {
@@ -19,7 +20,7 @@ function loadCards(type: string) {
     } 
     const dataArray = [];
     for(const [key, value] of Object.entries(data)) {
-      dataArray.push({ ...JSON.parse(JSON.stringify(value)), title: key.split("/").pop()?.split(".")[0] });
+      dataArray.push({ ...clone(value), title: key.split("/").pop()?.split(".")[0] });
     }
 
     _cards[type] = dataArray;

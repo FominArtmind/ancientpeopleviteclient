@@ -7,7 +7,7 @@
             {{ player.nick }} {{ player.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span>
             {{ player.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span>
             <!-- {{ player.awayCardsCount }}<span class="icon-fix"><Icon name="bi:people"/></span> -->
-            {{ player.deckSize }}<span class="icon-fix"><Icon name="mdi:cards"/></span>
+            {{ player.handSize }}<span class="icon-fix"><Icon name="mdi:cards"/></span>
             - <span class="icon-fix"><Icon name="mdi:axe"/></span> {{ raidChance }}
             <!--  - {{ timeSpent }} -->
           </h1>
