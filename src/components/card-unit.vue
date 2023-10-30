@@ -18,7 +18,7 @@
       <template v-if="unit?.raidFoodSteal"><Info :tooltip="`${unit?.title} has raid food steal ${unit?.raidFoodSteal.value}`" :changed="unit?.raidFoodSteal.changed"><Icon name="mdi:arrow-right-top"/>{{ unit?.raidFoodSteal.value }}</Info></template>
       <template v-if="unit?.unique"><Info :tooltip="`${unit?.title} is unique - you can possess only one unit of such type in your deck`"><Icon name="mdi:star-four-points-outline"/></Info></template>
     </div>
-    <div v-if="unit?.openBonus?.culture"><Info :tooltip="`${unit?.title} provides ${unit?.openBonus?.culture.value} additional culture on playing`" :changed="unit?.openBonus.culture.changed">{{unit?.openBonus.culture.value}}<span class="icon-fix"><Icon name="mdi:fire"/></span></Info></div>
+    <div v-if="unit?.openBonus?.culture?.value"><Info :tooltip="`${unit?.title} provides ${unit?.openBonus.culture.value} additional culture on playing`" :changed="unit?.openBonus.culture.changed">{{unit?.openBonus.culture.value}}<span class="icon-fix"><Icon name="mdi:fire"/></span></Info></div>
     <div v-if="extraCards"><Info :tooltip="`${unit?.title} adds ${extraCards} extra unit cards from the deck to your hand`"><Icon v-for="_n in extraCards" class="font-larger" name="mdi:plus-thick"/></Info></div>
     <div v-if="community"><Info :tooltip="`${unit?.title} opens ${community} unit cards from the deck, adds ${unit?.title} ones to your hand, other card types are put under the deck`">Community{{ community > 1 ? " " + community : "" }}</Info></div>
     <div v-if="migration"><Info :tooltip="`${unit?.title} opens ${migration} resource cards and adds them to your resources`">Migration{{ migration > 1 ? " " + migration : "" }}</Info></div>
@@ -36,15 +36,15 @@
     <div v-if="valor"><Info :tooltip="`${unit?.title} gains ${valor} culture exchange for each defender when raids`">Valor{{ valor > 1 ? " " + valor : "" }}</Info></div>
     <div v-if="cultureResistance"><Info :tooltip="`${unit?.title} decreases total culture exchange of raiders by 1 for each raider`">Resistance</Info></div>
     <div v-if="cultureRaid"><Info :tooltip="`${unit?.title} instantly transforms all the food gained in raid to culture`">Domination</Info></div>
-    <template v-if="unit?.villageAction && (unit?.villageAction.food || unit?.villageAction.culture || unit?.villageAction.sacrifice)">
+    <template v-if="unit?.villageAction && (unit?.villageAction.food?.value || unit?.villageAction.culture?.value || unit?.villageAction.sacrifice)">
       <div class="village-action">
         <div class="village-action-icon">
           <Info :tooltip="`${unit?.title} performs Site Action if stays at site in the end of the living phase and has not been defeated in a raid`">
             <Icon name="mdi:campfire"/>:&nbsp;
           </Info>
         </div>
-        <Info v-if="unit?.villageAction?.food" :tooltip="`${unit?.title} provides ${unit?.villageAction?.food.value} additional food if stays at site in the end of the living phase and has not been defeated in a raid`" :changed="unit?.villageAction.food.changed">{{unit?.villageAction.food.value}}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span></Info>
-        <Info v-if="unit?.villageAction?.culture" :tooltip="`${unit?.title} provides ${unit?.villageAction?.culture.value} additional culture if stays at site in the end of the living phase and has not been defeated in a raid`" :changed="unit?.villageAction.culture.changed">{{unit?.villageAction.culture.value}}<span class="icon-fix"><Icon name="mdi:fire"/></span></Info>
+        <Info v-if="unit?.villageAction?.food?.value" :tooltip="`${unit?.title} provides ${unit?.villageAction?.food.value} additional food if stays at site in the end of the living phase and has not been defeated in a raid`" :changed="unit?.villageAction.food.changed">{{unit?.villageAction.food.value}}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span></Info>
+        <Info v-if="unit?.villageAction?.culture?.value" :tooltip="`${unit?.title} provides ${unit?.villageAction?.culture.value} additional culture if stays at site in the end of the living phase and has not been defeated in a raid`" :changed="unit?.villageAction.culture.changed">{{unit?.villageAction.culture.value}}<span class="icon-fix"><Icon name="mdi:fire"/></span></Info>
         <Info v-if="unit?.villageAction?.sacrifice" :tooltip="`${unit?.title} converts all site food to culture if stays at site in the end of the living phase and has not been defeated in a raid`">Sacrifice</Info>
       </div>
     </template>
@@ -172,7 +172,7 @@ const unit = computed((): UnitIC => {
         unitObj[part] = {};
       }
       if(!origin[part]) {
-        origin = origin[part];
+        origin[part] = {};
       }
       obj = obj[part];
       unitObj = unitObj[part];

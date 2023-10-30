@@ -85,7 +85,7 @@ socket.on("game", (game_: Game) => {
   }
 
   const disableInventions = game_.options.find(value => value.name === "disableInventions")?.value === "true";
-  if(!disableInventions && game_.state.turn <= game_.inventions.length) {
+  if(!gameFinished.value && !disableInventions && game_.state.turn <= game_.inventions.length) {
     const changes: InventionChanges = {};
 
     const units = unitCards();
@@ -232,40 +232,62 @@ socket.on("game", (game_: Game) => {
         imbueChange("inhabitant", [], "foodCost", 1);
         break;
       case "fishingHook":
-        imbueChange("fish", [], "food", 2);
+        if(game_.state.phase === "living") {
+          imbueChange("fish", [], "food", 2);
+        }
         break;
       case "javelin":
-        imbueChange("deer", [], "food", 5);
+        if(game_.state.phase === "living") {
+          imbueChange("deer", [], "food", 5);
+        }
         break;
       case "atlatl":
-        imbueChange("aurochs", [], "food", 10);
+        if(game_.state.phase === "living") {
+          imbueChange("aurochs", [], "food", 10);
+        }
         break;
       case "needle":
-        needleVillageActionExtraCulture();
+        if(game_.state.phase === "living") {
+          needleVillageActionExtraCulture();
+        }
         break;
       case "paints":
-        paintsVillageActionExtraCulture();
-        paintsExtraCultureExchange();
+        if(game_.state.phase === "living") {
+          paintsVillageActionExtraCulture();
+          paintsExtraCultureExchange();
+        }
         break;
       case "basket":
-        basketExtraFoodSteal();
-        basketVillageActionExtraFood();
+        if(game_.state.phase === "living") {
+          basketExtraFoodSteal();
+          basketVillageActionExtraFood();
+        }
         break;
       case "handle":
-        handleExtraAttackAndHunting();
+        if(game_.state.phase === "living") {
+          handleExtraAttackAndHunting();
+        }
         break;
       case "foodPit":
-        foodPitVillageActionExtraFood();
+        if(game_.state.phase === "living") {
+          foodPitVillageActionExtraFood();
+        }
         break;
       case "totem":
-        totemLeadershipCardOpenExtraCulture();
-        totemExtraCultureValue();
+        if(game_.state.phase === "living") {
+          totemLeadershipCardOpenExtraCulture();
+          totemExtraCultureValue();
+        }
         break;
       case "bow":
-        bowExtraHunting();
+        if(game_.state.phase === "living") {
+          bowExtraHunting();
+        }
         break;
       case "bolas":
-        bolasDefenseRemoval();
+        if(game_.state.phase === "living") {
+          bolasDefenseRemoval();
+        }
         break;
     }
 
@@ -295,6 +317,7 @@ socket.on("stat", (stats: any) => {
   console.log("Socket stat", stats);
   stat.value = stats;
 
+  inventionChanges.value = {};
   gameFinished.value = true;
 });
 socket.on("done", () => {
