@@ -4,7 +4,7 @@ import { GeneralEvent } from "../types/events";
 import { Card, VillageCard, Game, Action } from "../types/game";
 import { InventionChanges } from "../types/invention-changes";
 import { Statistics } from "../types/statistics";
-import { unitCards, unitCard, resourceCard, developmentCard } from "../composables/content";
+import { unitCards, developmentCard } from "../composables/content";
 import { GAME_STUB, HAND_STUB } from "./stubs";
 
 // @ts-ignore
@@ -238,7 +238,7 @@ socket.on("game", (game_: Game) => {
         imbueChange("deer", [], "food", 5);
         break;
       case "atlatl":
-        imbueChange("atlatl", [], "food", 10);
+        imbueChange("aurochs", [], "food", 10);
         break;
       case "needle":
         needleVillageActionExtraCulture();
@@ -268,6 +268,8 @@ socket.on("game", (game_: Game) => {
         bolasDefenseRemoval();
         break;
     }
+
+    console.log("Invention changes", changes);
 
     inventionChanges.value = changes;
   }

@@ -8,7 +8,7 @@
       <div class="flex justify-between flex-wrap">
         <Info :tooltip="'Inventions provide temporal effects for the round, inventions for the current and the next two rounds are shown, the current round invention highlighted'"><div class="pr-2"><Icon name="mdi:weather-sunny" /></div></Info>
         <template v-for="(invention, index) in inventions">
-          <Info :tooltip="invention.description"><div class="px-1" :class="{ 'font-semibol': index === 0 }">{{ invention.name }}</div></Info>
+          <Info :tooltip="invention.description"><div class="px-1" :class="{ 'font-semibold': index === 0 }">{{ invention.name }}</div></Info>
         </template>
       </div>
       <div class="flex justify-between flex-wrap">
@@ -26,6 +26,7 @@
 import { computed } from "vue";
 import { gameLoaded, game } from "../composables/state";
 import Icon from "./icon.vue";
+import Info from "./info.vue";
 
 const victory = computed(() => {
   return game.value.options.find(value => value.name === "victoryCulture")?.value;
