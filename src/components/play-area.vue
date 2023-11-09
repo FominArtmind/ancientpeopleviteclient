@@ -39,7 +39,7 @@
       </ul>
       <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
       </div>
-      <div v-if="gameLoaded && opponents.length > 0" class="flex">
+      <div v-if="gameLoaded && opponents.length > 0" class="flex opponents">
         <Opponent v-for="opponent in opponents" :player="opponent" :raidChances="opponentRaidChances[opponent.nick]?.chances" :raidFoodGain="opponentRaidChances[opponent.nick]?.foodGain" />
       </div>
       <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
@@ -90,6 +90,9 @@
 
 .empty-opponents {
   min-height: 120px;
+}
+.opponents {
+  border-bottom: 1px solid white;
 }
 .village {
   display: inline-block;
@@ -142,7 +145,66 @@ const opponents = computed(() => {
   return opps;
 });
 
-const opponentRaidChances = ref<{[name: string]: { chances: RaidChances, foodGain: number }}>({});
+const opponentRaidChances = computed(() => {
+  let result: {[name: string]: { chances: RaidChances, foodGain: number }} = {};
+
+  if(opponents.value.length > 0) {
+    if(selection.value.village.length > 0 && !selection.value.village.find(value => value.rotated)) {
+      const attackers = selection.value.village.length;
+      let attack = 0;
+      let cultureExchange = 0;
+      let valor = 0;
+      let raidFoodSteal = 0;
+      let sneak = 0;
+
+      for(const villageCard of selection.value.village) {
+        const unit = inventionChangedUnitCards.value.find(value => value.title === villageCard.card.type) as UnitIC;
+        
+        attack += unit.attack?.value || 0;
+        cultureExchange += unit.cultureExchange?.value || 0;
+        valor += unit?.properties?.valor || 0;
+        raidFoodSteal += unit?.raidFoodSteal?.value || 0;
+        sneak += unit?.properties?.sneak || 0;
+      }
+
+      const invention = game.value.inventions[game.value.state.turn - 1];
+
+      for(const opp of opponents.value) {
+        const defendingVillage = opp.village.filter(value => !value.rotated);
+        const defenders = defendingVillage.length;
+
+        let defense = 0;
+        let cultureValue = 0;
+        let cultureResistance = false;
+        let hideaway = 0;
+
+        for(const villageCard of defendingVillage) {
+          const unit = inventionChangedUnitCards.value.find(value => value.title === villageCard.card.type) as UnitIC;
+          
+          defense += unit.defense?.value || 0;
+          cultureValue += unit.cultureValue?.value || 0;
+          if(unit.properties?.cultureResistance) {
+            cultureResistance = true;
+          }
+          hideaway += unit.properties?.hideaway || 0;
+        }
+        cultureValue = Math.floor(cultureValue);
+        let effectiveCultureExchange = cultureExchange += valor * defenders;
+        if(cultureResistance) {
+          effectiveCultureExchange = Math.min(0, cultureExchange - attackers);
+        }
+
+        const availableFood = invention !== "dog" ? Math.max(0, opp.food - hideaway) : 0;
+        const foodGain = Math.min(availableFood, raidFoodSteal) + sneak * defenders;
+
+        const chances = raidChances(attackers, attack, defenders, defense, 0, 0, effectiveCultureExchange, cultureValue);
+        result[opp.nick] = { chances, foodGain };
+      }
+    }
+  }
+
+  return result;
+});
 
 const heroTurn = computed(() => {
   return game.value.state.players[game.value.state.actor].nick === nickname.value;
@@ -385,60 +447,13 @@ const menuActions: ComputedRef<MenuAction[]> = computed(() => {
           })
         }
         else if(selection.value.village.length > 0) {
-          const attackers = selection.value.village.length;
-          let attack = 0;
-          let cultureExchange = 0;
-          let valor = 0;
-          let raidFoodSteal = 0;
-          let sneak = 0;
-
-          for(const villageCard of selection.value.village) {
-            const unit = inventionChangedUnitCards.value.find(value => value.title === villageCard.card.type) as UnitIC;
-            
-            attack += unit.attack?.value || 0;
-            cultureExchange += unit.cultureExchange?.value || 0;
-            valor += unit?.properties?.valor || 0;
-            raidFoodSteal += unit?.raidFoodSteal?.value || 0;
-            sneak += unit?.properties?.sneak || 0;
-          }
-
-          const invention = game.value.inventions[game.value.state.turn - 1];
-
           for(const opp of opponents.value) {
-            const defendingVillage = opp.village.filter(value => !value.rotated);
-            const defenders = defendingVillage.length;
-
-            let defense = 0;
-            let cultureValue = 0;
-            let cultureResistance = false;
-            let hideaway = 0;
-
-            for(const villageCard of defendingVillage) {
-              const unit = inventionChangedUnitCards.value.find(value => value.title === villageCard.card.type) as UnitIC;
-              
-              defense += unit.defense?.value || 0;
-              cultureValue += unit.cultureValue?.value || 0;
-              if(unit.properties?.cultureResistance) {
-                cultureResistance = true;
-              }
-              hideaway += unit.properties?.hideaway || 0;
-            }
-            let effectiveCultureExchange = cultureExchange += valor * defenders;
-            if(cultureResistance) {
-              effectiveCultureExchange = Math.min(0, cultureExchange - attackers);
-            }
-
-            const availableFood = invention !== "dog" ? Math.max(0, opp.food - hideaway) : 0;
-            const foodGain = Math.min(availableFood, raidFoodSteal) + sneak * defenders;
-
-            const chances = raidChances(attackers, attack, defenders, defense, 0, 0, effectiveCultureExchange, cultureValue);
-            opponentRaidChances.value[opp.nick] = { chances, foodGain };
             actions.push({
               type: "raid",
               source: selection.value.village.map(value => value.card),
               aim: opp.village.filter(value => !value.rotated).map(value => value.card),
               aimPlayer: opp.nick,
-              raidChances: chances
+              raidChances: opponentRaidChances.value[opp.nick]?.chances
             });
           }
         }
@@ -559,7 +574,7 @@ function raid(opponent: string) {
     actor: nickname.value,
     type: "raid",
     source: [...selection.value.village.map(value => value.card.id)],
-    aim: [game.value.players.indexOf(opponent)]
+    aim: [game.value.state.players.findIndex(value => value.nick === opponent)]
   });
 }
 
@@ -711,10 +726,12 @@ function raidChances(attackersCount: number, extraAttack: number, defendersCount
     }
   }
 
+  console.log("WIN", cultureGainChancesMap.win, "LOSE", cultureGainChancesMap.lose);
+
   const winCultureGainArray = Object.entries(cultureGainChancesMap.win).map(value => ({ culture: parseInt(value[0], 10), chance: roundedWinLoseRates(value[1]).winRate }));
-  winCultureGainArray.sort((a, b) => a.culture - b.culture);
+  winCultureGainArray.sort((a, b) => b.culture - a.culture);
   const loseCultureGainArray = Object.entries(cultureGainChancesMap.lose).map(value => ({ culture: parseInt(value[0], 10), chance: roundedWinLoseRates(value[1]).winRate }));
-  loseCultureGainArray.sort((a, b) => a.culture - b.culture);
+  loseCultureGainArray.sort((a, b) => b.culture - a.culture);
 
   const roundedRates = roundedWinLoseRates(winRate);
 

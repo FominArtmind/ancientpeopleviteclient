@@ -19,10 +19,11 @@
 import { computed } from "vue";
 import { Card } from "../types/game";
 import { game } from "../composables/state";
-// @ts-ignore
-import { DateTime } from "luxon";
+import { unitCard } from "../composables/content";
 import CardDevelopment from "./card-development.vue";
 import CardUnit from "./card-unit.vue";
+// @ts-ignore
+import { DateTime } from "luxon";
 
 const emit = defineEmits<{
   cardClicked: [card: Card, development: boolean]
@@ -30,7 +31,29 @@ const emit = defineEmits<{
 }>();
 
 const draft = computed(() => {
-  return game.value.state.draftCards;
+  const cards = game.value.state.draftCards.slice();
+  cards.sort((a, b) => {
+    let aName = a.type;
+    let bName = b.type;
+    if(aName === bName) {
+      return 0;
+    }
+    let aCost = unitCard(a.type).foodCost;
+    let bCost = unitCard(b.type).foodCost;
+
+    if(aCost < bCost) {
+      return -1;
+    }
+    else if(aCost === bCost) {
+      if(aName < bName) {
+        return -1;
+      }
+    }
+
+    return 1;
+  });
+
+  return cards;
 });
 
 // const draftDeckSize = computed(() => {

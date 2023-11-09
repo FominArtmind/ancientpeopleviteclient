@@ -14,7 +14,7 @@
             <div class="hand-arrow"><Icon name="mdi:arrow-left-bold-outline"/></div>
           </div>
           <div class="adaptive-text-container" v-for="card in hand">
-            <CardUnit :card="card" :location="'hand'" :suggested="hero.state.playingCard" @click="$emit('cardClicked', card, 'hand')" />
+            <CardUnit :card="card" :location="'hand'" :suggested="heroTurn && hero.state.playingCard" @click="$emit('cardClicked', card, 'hand')" />
             <!--<div class="adaptive-text">Hand</div> -->
           </div>
         </template>

@@ -14,7 +14,7 @@
         </template>
 
         <v-card>
-          <v-card-text>
+          <v-card-text class="font-medium">
             <div>Food: {{ player.food }}</div>
             <div>Culture: {{ player.culture }}</div>
             <div>Hand Size: {{ player.handSize }}</div>
@@ -22,7 +22,7 @@
             <div>Away Cards: {{ player.awayCardsCount }}</div>
             <div v-if="raidChances">
               <div>Raid success chance: {{ raidChances.winRate }}% ({{ raidChances.emotion }})</div>
-              <div class="flex">
+              <div class="flex w-60 justify-between mb-4 ml-4">
                 <div>
                   <div>Win</div>
                   <div v-for="item in raidChances.winCultureGainArray">{{raidFoodGain}}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span> {{ item.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span> - {{ item.chance }}%</div>
@@ -65,10 +65,7 @@
 
 <style scoped>
 .opponent-area {
-  border-bottom: 1px solid white;
   padding-bottom: 0.25rem;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
   width: 100%;
 }
 .opponent-area-multiple-players {
