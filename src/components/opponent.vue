@@ -1,9 +1,9 @@
 <template>
-  <div class="opponent-area" :class="{ 'opponent-area-multiple-players': totalPlayers > 2, 'active-player': activePlayer }" :style="opponentAreaMaxWidthStyle">
+  <div class="opponent-area" :class="{ 'opponent-area-multiple-players': totalPlayers > 2 }" :style="opponentAreaMaxWidthStyle">
     <div class="adaptive-text-container">
       <v-menu>
         <template v-slot:activator="{ props }">
-          <h1 v-bind="props" id="player-header" class="adaptive-text text-center pt-2 pb-2 cursor-pointer" @click="dialog = true">
+          <h1 v-bind="props" id="player-header" class="adaptive-text text-center pt-2 pb-2 cursor-pointer" :class="{'active-player': activePlayer }" @click="dialog = true">
             {{ player.nick }} {{ player.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span>
             <span :class="{ 'invention-changed': effectiveCulture !== player.culture }">{{ effectiveCulture }}</span><span class="icon-fix"><Icon name="mdi:fire"/></span>
             <!-- {{ player.awayCardsCount }}<span class="icon-fix"><Icon name="bi:people"/></span> -->

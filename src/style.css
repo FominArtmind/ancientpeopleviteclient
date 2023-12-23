@@ -97,7 +97,8 @@ body {
 }
 
 .active-player {
-  background: rgb(137, 180, 197, 0.4);
+  /* background: rgb(137, 180, 197, 0.4); */
+  background: radial-gradient(closest-side, #ffffff75, transparent);
 }
 
 .invention-changed {
