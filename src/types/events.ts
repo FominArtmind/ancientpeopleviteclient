@@ -22,13 +22,6 @@ export interface ExtraFoodEvent {
   discard: string[] 
 }
 
-export interface DevelopEvent {
-  type: "develop"
-  actor: string
-  card: string
-  unknownForPlayer: boolean 
-}
-
 export interface EndEvent {
   type: "end"
   winner: string
@@ -87,6 +80,7 @@ export interface DevelopEvent {
   type: "develop"
   actor: string
   card: string
+  unknownForPlayer: boolean 
 }
 
 export interface PathfindingChoiceEvent {
