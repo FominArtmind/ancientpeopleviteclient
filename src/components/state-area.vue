@@ -13,7 +13,7 @@
       </div>
       <div class="flex justify-between flex-wrap">
         <Info :tooltip="'Players turn order, the current active player is highlighted'"><div class="pr-2"><Icon name="mdi:account-supervisor" /></div></Info>
-        <div v-for="(player, index) in game.state.players" class="px-1" :class="{ 'font-semibold': index === game.state.actor }">{{ player.nick.substring(0, 10) }}</div>
+        <div v-for="{ nick, active } in turnOrder" class="px-1" :class="{ 'font-semibold': active }">{{ nick }}</div>
       </div>
     </template>
   </div>
@@ -30,6 +30,19 @@ import Info from "./info.vue";
 
 const victory = computed(() => {
   return game.value.options.find(value => value.name === "victoryCulture")?.value;
+});
+
+const turnOrder = computed(() => {
+  const firstPlayer = (game.value.state.turn - 1) % game.value.state.players.length;
+  const order: { nick: string, active: boolean }[] = [];
+  for(let n = 0; n < game.value.state.players.length; n++) {
+    const index = (n + firstPlayer) % game.value.state.players.length;
+    order.push({
+      nick: game.value.state.players[index].nick.substring(0, 10),
+      active: index === game.value.state.actor
+    });
+  }
+  return order;
 });
 
 const inventions = computed(() => {
