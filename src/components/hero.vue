@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-area-container">
+  <div class="hero-area-container" :class="{ 'active-player': heroTurn }">
     <div class="hero-area" :style="heroAreaMaxWidthStyle">
       <div class="adaptive-text-container">
         <h1 class="adaptive-text text-center pb-2 pt-2">Village {{ hero.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span> {{ hero.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span> away {{ hero.awayCardsCount }} deck {{ hero.deckSize }} - {{ timeSpent }}<span class="inline-block pl-2" :class="{ 'action-required': action }">{{ action ? action : 'Wait for other players' }}</span></h1>

@@ -40,7 +40,7 @@
       <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
       </div>
       <div v-if="gameLoaded && opponents.length > 0" class="flex opponents">
-        <Opponent v-for="opponent in opponents" :player="opponent" :raidChances="opponentRaidChances[opponent.nick]?.chances" :raidFoodGain="opponentRaidChances[opponent.nick]?.foodGain" />
+        <Opponent v-for="opponent in opponents" :player="opponent" :activePlayer="game.state.players[game.state.actor].nick === opponent.nick" :raidChances="opponentRaidChances[opponent.nick]?.chances" :raidFoodGain="opponentRaidChances[opponent.nick]?.foodGain" />
       </div>
       <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
       <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />

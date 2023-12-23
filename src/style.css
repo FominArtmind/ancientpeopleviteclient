@@ -97,7 +97,7 @@ body {
 }
 
 .active-player {
-  color: #b7ff57;
+  background: rgb(35, 84, 103, 0.4);
 }
 
 .invention-changed {

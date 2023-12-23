@@ -1,5 +1,5 @@
 <template>
-  <div class="opponent-area" :class="{ 'opponent-area-multiple-players': totalPlayers > 2 }" :style="opponentAreaMaxWidthStyle">
+  <div class="opponent-area" :class="{ 'opponent-area-multiple-players': totalPlayers > 2, 'active-player': activePlayer }" :style="opponentAreaMaxWidthStyle">
     <div class="adaptive-text-container">
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -83,7 +83,7 @@ import Icon from "./icon.vue";
 import CardUnit from "./card-unit.vue";
 import { RaidChances } from "../types/menu-action";
 
-const props = defineProps<{ player: Player, raidChances: RaidChances, raidFoodGain: number }>();
+const props = defineProps<{ player: Player, activePlayer: boolean, raidChances: RaidChances, raidFoodGain: number }>();
 
 const dialog = ref(false);
 
