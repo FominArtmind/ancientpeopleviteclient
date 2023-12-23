@@ -13,7 +13,7 @@ const ancientTheme: ThemeDefinition = {
   dark: true,
   colors: {
     background: "#829499",
-    surface: "#829499",
+    surface: "#4F7483",
     "surface-variant": "#80AEBB",
     "on-surface-variant": "#FFFFFF", 
     primary: "#FFFFFF",
