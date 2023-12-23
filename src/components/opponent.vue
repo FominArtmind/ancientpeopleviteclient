@@ -82,9 +82,8 @@ import { DateTime } from "luxon";
 import Icon from "./icon.vue";
 import CardUnit from "./card-unit.vue";
 import { RaidChances } from "../types/menu-action";
-import { unitCards } from "../composables/content";
 
-const props = defineProps<{ player: Player, activePlayer: boolean, raidChances: RaidChances, raidFoodGain: number }>();
+const props = defineProps<{ player: Player, effectiveCulture: number, activePlayer: boolean, raidChances: RaidChances, raidFoodGain: number }>();
 
 const dialog = ref(false);
 
@@ -93,25 +92,6 @@ const windowHeight = inject<Ref<number>>("windowHeight", ref(0));
 
 const totalPlayers = computed(() => {
   return game.value.players.length;
-});
-
-const phase = computed(() => {
-  return game.value.state.phase;
-});
-
-const effectiveCulture = computed(() => {
-  if(phase.value !== "development") {
-    return props.player.culture;
-  }
-  let additionalCultureLevel = 0;
-  for(const unitCard of props.player.village) {
-    const unit = unitCards().find(value => value.title === unitCard.card.type);
-    if(unit?.properties?.cultureLevelIncrease) {
-      additionalCultureLevel += unit.properties.cultureLevelIncrease;
-    }
-  }
-
-  return props.player.culture + additionalCultureLevel;
 });
 
 const timeSpent = computed(() => {

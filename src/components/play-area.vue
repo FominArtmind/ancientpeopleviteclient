@@ -40,11 +40,11 @@
       <div v-if="gameLoaded && opponents.length === 0" class="empty-opponents">
       </div>
       <div v-if="gameLoaded && opponents.length > 0" class="flex opponents">
-        <Opponent v-for="opponent in opponents" :player="opponent" :activePlayer="game.state.players[game.state.actor].nick === opponent.nick" :raidChances="opponentRaidChances[opponent.nick]?.chances" :raidFoodGain="opponentRaidChances[opponent.nick]?.foodGain" />
+        <Opponent v-for="opponent in opponents" :player="opponent" :effectiveCulture="playersEffectiveCulture[opponent.nick]" :activePlayer="game.state.players[game.state.actor].nick === opponent.nick" :raidChances="opponentRaidChances[opponent.nick]?.chances" :raidFoodGain="opponentRaidChances[opponent.nick]?.foodGain" />
       </div>
       <Resources v-if="gameLoaded && phase === 'living'" @cardClicked="processResourceCardClicked" />
-      <Draft v-if="gameLoaded && phase === 'development'" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
-      <Hero v-if="gameLoaded" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
+      <Draft v-if="gameLoaded && phase === 'development'" :heroEffectiveCulture="heroEffectiveCulture" @cardClicked="processDraftCardClicked" @cardRightClicked="processDraftCardRightClicked" />
+      <Hero v-if="gameLoaded" :effectiveCulture="heroEffectiveCulture" @cardClicked="processHeroCardClicked" @cardRightClicked="processHeroCardRightClicked" />
     </template>
     <template v-if="gameFinished">
       <Stats />
@@ -109,6 +109,7 @@ import { ref, ComputedRef, computed, nextTick } from "vue";
 import { Card, VillageCard, Player, Action } from "../types/game";
 import { RaidChances, MenuAction } from "../types/menu-action";
 import { nickname, gameLoaded, gameFinished, game, selection, actionPerformed, performAction, UnitIC, inventionChangedUnitCards } from "../composables/state";
+import { unitCards } from "../composables/content";
 import { clone } from "../utils/clone";
 import ArtIcon from "./art-icon.vue";
 import ChatValue from "./chat-value.vue";
@@ -143,6 +144,35 @@ const opponents = computed(() => {
     opps.push(game.value.state.players[(heroIndex + 1 + n) % playersN]);
   }
   return opps;
+});
+
+const playersEffectiveCulture = computed(() => {
+  const effectiveCulture: {[nick: string]: number } = {};
+
+  if(phase.value !== "development") {
+    for(const player of game.value.state.players) {
+      effectiveCulture[player.nick] = player.culture;
+    }
+  }
+  else {
+    for(const player of game.value.state.players) {
+      let additionalCultureLevel = 0;
+      for(const unitCard of player.village) {
+        const unit = unitCards().find(value => value.title === unitCard.card.type);
+        if(unit?.properties?.cultureLevelIncrease) {
+          additionalCultureLevel += unit.properties.cultureLevelIncrease;
+        }
+      }
+
+      effectiveCulture[player.nick] = player.culture + additionalCultureLevel;
+    }
+  }
+
+  return effectiveCulture;
+});
+
+const heroEffectiveCulture = computed(() => {
+  return playersEffectiveCulture.value[hero.value.nick];
 });
 
 const opponentRaidChances = computed(() => {

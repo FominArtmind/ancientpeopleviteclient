@@ -78,7 +78,8 @@ import { nickname, game, handLoaded, hand } from "../composables/state";
 import { DateTime } from "luxon";
 import CardUnit from "./card-unit.vue";
 import Icon from "./icon.vue";
-import { unitCards } from "../composables/content";
+
+defineProps<{ effectiveCulture: number }>();
 
 const emit = defineEmits<{
   cardClicked: [card: Card | VillageCard, location: "village" | "hand"]
@@ -97,21 +98,6 @@ const heroTurn = computed(() => {
 
 const phase = computed(() => {
   return game.value.state.phase;
-});
-
-const effectiveCulture = computed(() => {
-  if(phase.value !== "development") {
-    return hero.value.culture;
-  }
-  let additionalCultureLevel = 0;
-  for(const unitCard of hero.value.village) {
-    const unit = unitCards().find(value => value.title === unitCard.card.type);
-    if(unit?.properties?.cultureLevelIncrease) {
-      additionalCultureLevel += unit.properties.cultureLevelIncrease;
-    }
-  }
-
-  return hero.value.culture + additionalCultureLevel;
 });
 
 const timeSpent = computed(() => {

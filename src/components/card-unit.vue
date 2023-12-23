@@ -6,7 +6,7 @@
       </Info>
       <div class="unit-title">{{ unit?.title }}</div>
       <Info v-if="unit?.cultureLevel?.value" class="unit-culture-level" :tooltip="`${unit?.title} requires at least one player having culture level of ${unit?.cultureLevel.value} or higher to appear on draft, you must have culture level of ${unit?.cultureLevel.value} or higher to be able to buy/upgrade to this card`" :changed="unit?.cultureLevel.changed">
-        {{unit?.cultureLevel.value}}<span class="icon-fix"><Icon name="mdi:fire"/></span>
+        <span :class="{ 'not-enough-culture': unit?.cultureLevel.value && heroEffectiveCulture !== undefined && heroEffectiveCulture < unit?.cultureLevel.value }">{{unit?.cultureLevel.value}}</span><span class="icon-fix"><Icon name="mdi:fire"/></span>
       </Info>
     </div>
     <div class="w-full image-container bg-contain bg-no-repeat" :style="{ 'background-image': 'url(./gamedata/units/views/' + card.type + '-icon-white.png)' }"></div>
@@ -110,6 +110,10 @@
   left: 0;
   top: -1%;
 }
+
+.not-enough-culture {
+  color: rgb(251 142 142);
+}
 </style>
 
 <script setup lang="ts">
@@ -122,7 +126,7 @@ import CardBody from "./card-body.vue";
 import Info from "./info.vue";
 import Icon from "./icon.vue";
 
-const props = defineProps<{ card: Card, location?: "village" | "hand" | "draft", suggested?: boolean, rotated?: boolean }>();
+const props = defineProps<{ card: Card, location?: "village" | "hand" | "draft", heroEffectiveCulture?: number, suggested?: boolean, rotated?: boolean }>();
 
 interface IC {
   value: number
