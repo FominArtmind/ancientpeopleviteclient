@@ -229,7 +229,7 @@
     </table>
     <hr />
     <button class="bg-ancient-600 hover:bg-ancient-500 rounded-none text-white py-1 px-4 focus:outline-none focus:shadow-outline return-button" type="button" @click="returnToLobby">Return to lobby</button>
-    <hr />
+    <hr class="last-hr" />
   </div>
 </template>
 
@@ -258,6 +258,9 @@ td {
 hr {
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
+}
+.last-hr {
+  margin-bottom: 0rem;
 }
 .table {
   margin-left: auto;
