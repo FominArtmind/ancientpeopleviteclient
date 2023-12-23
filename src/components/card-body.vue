@@ -100,6 +100,7 @@
 }
 .card-suggested {
   animation: blink 1.75s infinite ease;
+  background: rgb(144, 180, 193, 0.4);
 }
 
 .rotated {
