@@ -1,5 +1,5 @@
 <template>
-  <CardBody :selected="selected" :suggested="suggested" :rotated="rotated">
+  <CardBody :selected="selected" :suggested="suggested" :rotated="rotated" :hand="location === 'hand'">
     <div class="">
       <Info class="unit-cost" :tooltip="`${unit?.title} costs ${unit?.foodCost.value} food on draft`" :changed="unit?.foodCost.changed">
         <div class="food-cost">{{unit?.foodCost.value}}</div>

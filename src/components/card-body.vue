@@ -2,7 +2,7 @@
   <div class="card-container" :class="{ 'rotated': rotated }">
     <v-tooltip v-if="rotated" activator="parent" location="bottom" max-width="200px" open-delay="750">Rotated: can't defend raids and raid themselves, can't perform site actions</v-tooltip>
     <div class="w-full h-full card-background">
-      <div class="w-full h-full p-1 card text-center" :class="{ 'card-suggested': suggested, 'card-selected': selected }">
+      <div class="w-full h-full p-1 card text-center" :class="{ 'card-suggested': suggested, 'card-selected': selected, 'card-hand': hand }">
         <slot />
       </div>
     </div>
@@ -100,7 +100,10 @@
 }
 .card-suggested {
   animation: blink 1.75s infinite ease;
-  background: rgb(144, 180, 193, 0.4);
+}
+
+.card-hand {
+  background: radial-gradient(#ffffff15, #2a404b78);
 }
 
 .rotated {
@@ -110,7 +113,7 @@
 
 <script setup lang="ts">
 
-defineProps<{ selected?: boolean, rotated?: boolean, suggested?: boolean }>();
+defineProps<{ selected?: boolean, rotated?: boolean, suggested?: boolean, hand?: boolean }>();
 const emit = defineEmits<{
   clicked: []
 }>();
