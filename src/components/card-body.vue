@@ -30,7 +30,7 @@
 } */
 .card-background {
   /* background-color: rgba(154, 182, 189, 0.35); */
-  background-color: rgba(118, 139, 144, 0.35);
+  background: radial-gradient(#ffffff15, #50708078);
   font-size: 0.35rem;
   line-height: 100%;
 }

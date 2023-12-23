@@ -1,17 +1,24 @@
 <template>
   <div class="flex w-screen h-screen bg-cover select-none" :style="{ 'background-image': 'url(./intro-bg.png)' }">
-    <div class="w-1/5 h-screen overflow-hidden">
+    <div class="w-1/5 h-screen overflow-hidden side-area">
       <StateArea class="h-28" />
       <ChatArea class="h-[calc(100%-160px)]" />
       <ChatSendBox class="h-12" />
     </div>
-    <div class="w-4/5">
+    <div class="w-4/5 main-area">
       <PlayArea />
     </div>
   </div> 
 </template>
 
 <style scoped>
+.side-area {
+  background: rgb(35, 84, 103, 0.5);
+}
+
+.main-area {
+  background: rgb(35, 84, 103, 0.4);
+}
 </style>
 
 <script setup lang="ts">
