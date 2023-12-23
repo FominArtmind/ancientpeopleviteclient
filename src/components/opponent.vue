@@ -5,7 +5,7 @@
         <template v-slot:activator="{ props }">
           <h1 v-bind="props" id="player-header" class="adaptive-text text-center pt-2 pb-2 cursor-pointer" @click="dialog = true">
             {{ player.nick }} {{ player.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span>
-            {{ player.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span>
+            <span :class="{ 'invention-changed': effectiveCulture !== player.culture }">{{ effectiveCulture }}</span><span class="icon-fix"><Icon name="mdi:fire"/></span>
             <!-- {{ player.awayCardsCount }}<span class="icon-fix"><Icon name="bi:people"/></span> -->
             {{ player.handSize }}<span class="icon-fix"><Icon name="mdi:cards"/></span>
             <span v-if="raidChances"> - <span class="icon-fix"><Icon name="mdi:axe"/></span> {{ raidChances.winRate }}%</span>
@@ -16,7 +16,7 @@
         <v-card>
           <v-card-text class="font-medium">
             <div>Food: {{ player.food }}</div>
-            <div>Culture: {{ player.culture }}</div>
+            <div>Culture: <span :class="{ 'invention-changed': effectiveCulture !== player.culture }">{{ effectiveCulture }}</span></div>
             <div>Hand Size: {{ player.handSize }}</div>
             <div>Deck Size: {{ player.deckSize }}</div>
             <div>Away Cards: {{ player.awayCardsCount }}</div>
@@ -82,6 +82,7 @@ import { DateTime } from "luxon";
 import Icon from "./icon.vue";
 import CardUnit from "./card-unit.vue";
 import { RaidChances } from "../types/menu-action";
+import { unitCards } from "../composables/content";
 
 const props = defineProps<{ player: Player, activePlayer: boolean, raidChances: RaidChances, raidFoodGain: number }>();
 
@@ -92,6 +93,25 @@ const windowHeight = inject<Ref<number>>("windowHeight", ref(0));
 
 const totalPlayers = computed(() => {
   return game.value.players.length;
+});
+
+const phase = computed(() => {
+  return game.value.state.phase;
+});
+
+const effectiveCulture = computed(() => {
+  if(phase.value !== "development") {
+    return props.player.culture;
+  }
+  let additionalCultureLevel = 0;
+  for(const unitCard of props.player.village) {
+    const unit = unitCards().find(value => value.title === unitCard.card.type);
+    if(unit?.properties?.cultureLevelIncrease) {
+      additionalCultureLevel += unit.properties.cultureLevelIncrease;
+    }
+  }
+
+  return props.player.culture + additionalCultureLevel;
 });
 
 const timeSpent = computed(() => {

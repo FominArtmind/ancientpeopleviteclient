@@ -2,7 +2,7 @@
   <div class="hero-area-container" :class="{ 'active-player': heroTurn }">
     <div class="hero-area" :style="heroAreaMaxWidthStyle">
       <div class="adaptive-text-container">
-        <h1 class="adaptive-text text-center pb-2 pt-2">Village {{ hero.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span> {{ hero.culture }}<span class="icon-fix"><Icon name="mdi:fire"/></span> away {{ hero.awayCardsCount }} deck {{ hero.deckSize }} - {{ timeSpent }}<span class="inline-block pl-2" :class="{ 'action-required': action }">{{ action ? action : 'Wait for other players' }}</span></h1>
+        <h1 class="adaptive-text text-center pb-2 pt-2">Village {{ hero.food }}<span class="icon-fix"><Icon name="mdi:food-drumstick"/></span> <span :class="{ 'invention-changed': effectiveCulture !== hero.culture }">{{ effectiveCulture }}</span><span class="icon-fix"><Icon name="mdi:fire"/></span> away {{ hero.awayCardsCount }} deck {{ hero.deckSize }} - {{ timeSpent }}<span class="inline-block pl-2" :class="{ 'action-required': action }">{{ action ? action : 'Wait for other players' }}</span></h1>
       </div>
       <div class="card-grid w-[calc(100% - 4px)]" :style="gridRowsStyle">
         <div class="adaptive-text-container" v-for="card in hero.village">
@@ -78,6 +78,7 @@ import { nickname, game, handLoaded, hand } from "../composables/state";
 import { DateTime } from "luxon";
 import CardUnit from "./card-unit.vue";
 import Icon from "./icon.vue";
+import { unitCards } from "../composables/content";
 
 const emit = defineEmits<{
   cardClicked: [card: Card | VillageCard, location: "village" | "hand"]
@@ -96,6 +97,21 @@ const heroTurn = computed(() => {
 
 const phase = computed(() => {
   return game.value.state.phase;
+});
+
+const effectiveCulture = computed(() => {
+  if(phase.value !== "development") {
+    return hero.value.culture;
+  }
+  let additionalCultureLevel = 0;
+  for(const unitCard of hero.value.village) {
+    const unit = unitCards().find(value => value.title === unitCard.card.type);
+    if(unit?.properties?.cultureLevelIncrease) {
+      additionalCultureLevel += unit.properties.cultureLevelIncrease;
+    }
+  }
+
+  return hero.value.culture + additionalCultureLevel;
 });
 
 const timeSpent = computed(() => {
